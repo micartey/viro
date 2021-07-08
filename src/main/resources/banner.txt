@@ -1,0 +1,8 @@
+
+?88   d8P  88b  88bd88b d8888b
+d88  d8P'  88P  88P'  `d8P' ?88
+?8b ,88'  d88  d88     88b  d88
+`?888P'  d88' d88'     `?8888P'
+
+${application.title} ${application.version}
+Powered by Spring Boot ${spring-boot.version}
