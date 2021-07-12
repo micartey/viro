@@ -1,5 +1,6 @@
 package me.micartey.viro.brushes;
 
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import me.micartey.jation.JationObserver;
 import me.micartey.jation.annotations.Observe;
@@ -53,12 +54,15 @@ public class Move extends Brush {
     public void onMove(MouseDragEvent event, Window window) {
         Position translation = event.getSource().direction(event.getDestination());
 
+        Color color = window.getPreviewGraphics().getColor();
         window.getPreviewGraphics().reset();
 
         this.shapes.forEach(shape -> {
             shape.translate(translation);
             shape.draw(window.getPreviewGraphics());
         });
+
+        window.getPreviewGraphics().setColor(color);
     }
 
     @Observe
