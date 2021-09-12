@@ -1,5 +1,6 @@
 package me.micartey.viro.brushes;
 
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import me.micartey.jation.JationObserver;
 import me.micartey.jation.annotations.Observe;
@@ -10,6 +11,7 @@ import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.window.RadialMenu;
 import me.micartey.viro.window.Window;
 import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,7 +40,13 @@ public class Selection extends Brush {
     }
 
     @Observe
-    public void onSelect(MouseDragEvent event, Window window) {
+    public void onDrag(MouseDragEvent event, Window window) {
+        this.draw(
+                window.getPreviewGraphics(),
+                event.getOrigin(),
+                event.getDestination()
+        );
+
         window.getVisible().stream().filter(shape -> this.inSelection(shape, event.getOrigin(), event.getDestination()))
                 .filter(shape -> !this.shapes.contains(shape))
                 .forEach(this.shapes::add);
@@ -54,9 +62,31 @@ public class Selection extends Brush {
                 .forEach(this.shapes::add);
 
         radialMenu.selectBrush(this.move);
+        window.getPreviewGraphics().reset();
     }
 
     private boolean inSelection(Shape shape, Position pos1, Position pos2) {
         return shape.getPoints().stream().anyMatch(position -> position.between(pos1, pos2));
+    }
+
+    private void draw(GraphicsWrapper graphics, Position origin, Position destination) {
+        graphics.reset();
+
+        Color color = graphics.getColor();
+        double[] currentPattern = graphics.getLineDashes();
+        int lineWidth = graphics.getLineWidth();
+
+        graphics.setColor(Color.LIGHTGRAY);
+        graphics.setLineWidth(1);
+        graphics.setLineDashes(3);
+
+        graphics.drawLine(origin.getX(), origin.getY(), destination.getX(), origin.getY());
+        graphics.drawLine(destination.getX(), origin.getY(), destination.getX(), destination.getY());
+        graphics.drawLine(origin.getX(), origin.getY(), origin.getX(), destination.getY());
+        graphics.drawLine(origin.getX(), destination.getY(), destination.getX(), destination.getY());
+
+        graphics.setColor(color);
+        graphics.setLineDashes(currentPattern);
+        graphics.setLineWidth(lineWidth);
     }
 }
