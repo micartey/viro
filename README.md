@@ -1,9 +1,15 @@
 # viro
 
 <div align="center">
-  <a href="https://www.oracle.com/java/">
+  <a href="https://www.oracle.com/java/" target="_blank">
     <img
       src="https://img.shields.io/badge/Written%20in-java-%23EF4041?style=for-the-badge"
+      height="30"
+    />
+  </a>
+  <a href="https://spring.io/" target="_blank">
+    <img
+      src="https://img.shields.io/badge/spring-boot-%27a147?style=for-the-badge"
       height="30"
     />
   </a>
@@ -15,45 +21,38 @@
   </a>
 </div>
 
-## :books: Introduction
+## 📚 Introduction
 
 Viro is a Java doodle application. It is based on the [Spring](https://spring.io/) framework and uses JavaFX for rendering.
 
 ![](images/preview.gif)
 
----
-
-## :mag_right: Compatibility
+## 🔎 Compatibility
 
 - [x] [Windows](https://www.microsoft.com/)
 - [x] [Java 8](https://github.com/AdoptOpenJDK/openjdk-jdk8u)
 
-## :ballot_box: Installation
+## 💿 Installation
 
-To use viro, you must have Java installed or use the bundled zip available on the release tab.
+To use viro, you must have Java installed or use the [bundled zip](https://github.com/Clientastisch/viro/releases) available on the release tab. In case you downloaded the source and want to compile it, make sure to have `maven` installed and run:
 
-In case you downloaded the source and want to compile it, make sure to run
-
-```js
-mvn package -DskipTests=true -f pom.xml
+**(This step is only optional)**
+```bash
+$ mvn package -B -ntp -DskipTests=true -f pom.xml
 ```
 
-## :gear: Settings
+## ⚙ Settings
 
 Viro uses [PreferenceFx](https://github.com/dlsc-software-consulting-gmbh/PreferencesFX) to store, display and load settings. You Also have the possibility to set your own keybindings.
 
 ![](images/settings.png)
 
-## :safety_pin: Default Settings
+## ⌨ Default Keybindings
 
-### :heavy_check_mark: Show
-
-```
-ALT + PAUSE
-```
-
-### :x: Hide
-
-```
-ESC
-```
+| Key | Action |
+| --- | --- |
+| `ALT + PAUSE` | Show |
+| `ESC` | Hide |
+| `DELETE` | Clear Canvas |
+| `STRG + Z` | Undo |
+| `STRG + Y` | Redo |
