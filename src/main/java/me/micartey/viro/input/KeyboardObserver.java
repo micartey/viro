@@ -28,6 +28,7 @@ public class KeyboardObserver {
 
     private KeyStateObservable toggleVisibility;
     private KeyStateObservable redoUndoObserver;
+    private KeyStateObservable clearObserver;
 
     public KeyboardObserver(Window window, Settings settings, RadialMenu radialMenu, JationObserver observer) {
         this.radialMenu = radialMenu;
@@ -54,6 +55,15 @@ public class KeyboardObserver {
 
         this.redoUndoObserver = KeyStateObservable.of(Stream.concat(redo, undo).toArray(VirtualKey[]::new));
         this.redoUndoObserver.subscribe(this::onRedoUndoUpdate);
+    }
+
+    @SuppressWarnings("all")
+    @EventListener({ApplicationStartedEvent.class, SettingUpdateEvent.class})
+    public void updateClearObserver() {
+        Stream<VirtualKey> clear = this.fromNames(settings.getClearSelection().stream());
+
+        this.clearObserver = KeyStateObservable.of(clear.toArray(VirtualKey[]::new));
+        this.clearObserver.subscribe(this::onClearUpdate);
     }
 
     /**
@@ -94,6 +104,23 @@ public class KeyboardObserver {
 
         if(this.fromNames(this.settings.getUndoSelection().stream()).allMatch(this.redoUndoObserver::isPressed))
             this.window.undo();
+    }
+
+    /**
+     * Consumer for key press {@link KeyStateObservable KeyStateObservable} to
+     * clear all shapes
+     *
+     * @param update {@link KeyStateUpdate}
+     */
+    private void onClearUpdate(KeyStateUpdate update) {
+        if(!update.getKeyState().equals(KeyState.PRESSED))
+            return;
+
+        if (this.fromNames(this.settings.getClearSelection().stream()).allMatch(this.clearObserver::isPressed)) {
+            this.window.getVisible().clear();
+            this.window.getInvisible().clear();
+            this.window.repaint();
+        }
     }
 
     /**

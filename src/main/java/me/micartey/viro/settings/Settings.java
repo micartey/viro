@@ -53,6 +53,10 @@ public class Settings {
             Arrays.asList("CONTROL", "Y")
     ));
 
+    @Getter private final ListProperty<String> clearSelection = new SimpleListProperty<>(FXCollections.observableList(
+            Collections.singletonList("DELETE")
+    ));
+
     @Getter private final ObjectProperty<Color> editorColor = new SimpleObjectProperty<>(Color.rgb(21, 21, 21));
     @Getter private final ObjectProperty<Color> iconColor   = new SimpleObjectProperty<>(Color.rgb(159, 159, 159));
 
@@ -123,6 +127,10 @@ public class Settings {
                                         Setting.of("Redo",
                                                 keybindings,
                                                 redoSelection
+                                        ),
+                                        Setting.of("Clear",
+                                                keybindings,
+                                                clearSelection
                                         )
                                 )
                         )
