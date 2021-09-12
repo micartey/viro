@@ -201,6 +201,26 @@ public class GraphicsWrapper {
     }
 
     /**
+     * Set a stroke line dash pattern
+     *
+     * @param dashes pattern
+     * @see GraphicsWrapper#getLineDashes()
+     */
+    public void setLineDashes(double... dashes) {
+        this.graphics.setLineDashes(dashes);
+    }
+
+    /**
+     * Get the line dashes
+     *
+     * @return line dashes
+     * @see GraphicsWrapper#setLineDashes(double...)
+     */
+    public double[] getLineDashes() {
+        return this.graphics.getLineDashes();
+    }
+
+    /**
      * Reset the whole {@link GraphicsContext GraphicsContext}
      */
     public void reset() {
