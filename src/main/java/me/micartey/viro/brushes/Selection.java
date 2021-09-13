@@ -61,8 +61,12 @@ public class Selection extends Brush {
         backup.stream().distinct().sorted(Comparator.comparingInt(shape -> window.getVisible().search(shape)))
                 .forEach(this.shapes::add);
 
-        radialMenu.selectBrush(this.move);
         window.getPreviewGraphics().reset();
+
+        if (backup.isEmpty())
+            return;
+
+        radialMenu.selectBrush(this.move);
     }
 
     private boolean inSelection(Shape shape, Position pos1, Position pos2) {
