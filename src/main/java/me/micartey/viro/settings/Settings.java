@@ -7,10 +7,7 @@ import com.dlsc.preferencesfx.model.Group;
 import com.dlsc.preferencesfx.model.Setting;
 import com.dlsc.preferencesfx.view.PreferencesFxDialog;
 import dev.lukasl.jwinkey.enums.VirtualKey;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -60,6 +57,8 @@ public class Settings {
     @Getter private final ObjectProperty<Color> editorColor = new SimpleObjectProperty<>(Color.rgb(21, 21, 21));
     @Getter private final ObjectProperty<Color> iconColor   = new SimpleObjectProperty<>(Color.rgb(159, 159, 159));
 
+    @Getter private final IntegerProperty smoothness = new SimpleIntegerProperty(5);
+
     private final PreferencesFx preferencesFx;
 
     @Autowired
@@ -106,6 +105,9 @@ public class Settings {
                         ),
                         Group.of("Background",
                                 Setting.of("Color", backgroundColor)
+                        ),
+                        Group.of("Drawing",
+                                Setting.of("Smoothness", smoothness, 1, 20)
                         )
                 ).subCategories(
                         Category.of("Keybindings",
