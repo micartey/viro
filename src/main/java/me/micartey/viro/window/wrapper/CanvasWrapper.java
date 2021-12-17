@@ -152,4 +152,5 @@ public abstract class CanvasWrapper extends Canvas {
 
         this.paintComponent();
     }
+
 }
