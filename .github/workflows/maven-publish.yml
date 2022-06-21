@@ -24,9 +24,18 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-    
-    - name: Get Java version
-      run: java -version
-    
+
     - name: Build with Maven
       run: mvn package -B -ntp -DskipTests=true -f pom.xml
+
+    - name: Prepare artifact
+      run: |
+        7z x ./bin/java.zip
+        ls ./bin/java.zip
+        cp ./target/viro-1.0.jar ./bin/viro-1.0.jar
+
+    - name: Upload Portable artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: viro-portable
+        path: bin
