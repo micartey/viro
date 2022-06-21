@@ -40,5 +40,5 @@ jobs:
     - name: Upload java release
       uses: actions/upload-artifact@v2
       with:
-        name: viro.jar
+        name: viro
         path: ./bin/viro-1.0.jar
