@@ -3,6 +3,8 @@
 
 name: Maven Package
 
+permissions: read-all|write-all
+
 on:
   pull_request:
   push:
