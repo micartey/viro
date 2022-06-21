@@ -29,7 +29,7 @@ jobs:
       run: |
         7z x ./bin/java.zip
         ls ./bin/java.zip
-        cp ./target/viro-1.0.jar ./bin/viro-1.0.jar
+        cp ./target/viro-1.0.jar ./bin/viro.jar
 
     - name: Upload Portable artifact
       uses: actions/upload-artifact@v2
@@ -41,4 +41,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: viro
-        path: ./bin/viro-1.0.jar
+        path: ./bin/viro.jar
