@@ -7,9 +7,9 @@
       height="30"
     />
   </a>
-  <a href="https://spring.io/" target="_blank">
+  <a href="https://github.com/Clientastisch/viro/actions/workflows/maven-publish.yml" target="_blank">
     <img
-      src="https://img.shields.io/badge/spring-boot-%27a147?style=for-the-badge"
+      src="https://img.shields.io/badge/actions-build-%27a147?style=for-the-badge"
       height="30"
     />
   </a>
