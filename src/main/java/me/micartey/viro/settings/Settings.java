@@ -36,6 +36,10 @@ public class Settings {
             Arrays.stream(VirtualKey.values()).map(VirtualKey::name).map(name -> name.substring(3)).collect(Collectors.toList())
     ));
 
+    @Getter private final ListProperty<String> openGraphicImport  = new SimpleListProperty<>(FXCollections.observableList(
+            Arrays.asList("CONTROL", "I")
+    ));
+
     @Getter private final ListProperty<String> enableSelection  = new SimpleListProperty<>(FXCollections.observableList(
             Collections.singletonList("PAUSE")
     ));
@@ -122,6 +126,10 @@ public class Settings {
                                         )
                                 ),
                                 Group.of("Editor",
+                                        Setting.of("Import Graphics",
+                                                keybindings,
+                                                openGraphicImport
+                                        ),
                                         Setting.of("Undo",
                                                 keybindings,
                                                 undoSelection

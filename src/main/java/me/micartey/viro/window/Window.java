@@ -4,6 +4,7 @@ import com.sun.javafx.application.PlatformImpl;
 import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Screen;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import me.micartey.viro.brushes.Eraser;
 import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.mouse.MouseScrollEvent;
 import me.micartey.viro.events.viro.*;
+import me.micartey.viro.settings.GraphicImport;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.window.utilities.Position;
@@ -23,6 +25,7 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.Stack;
 
 @Component

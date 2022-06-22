@@ -14,24 +14,25 @@ public class Graphic extends Shape {
     private Position middle;
 
     private final Image  image;
-    private final double size;
+    private final double width, height;
 
-    public Graphic(Image image, Position middle, int size, Color color, int width) {
-        super(color, width);
+    public Graphic(Image image, Position middle, double width, double height, Color color, int weight) {
+        super(color, weight);
 
         this.middle = middle;
         this.image = image;
-        this.size = size;
+        this.height = height;
+        this.width = width;
     }
 
     @Override
     public void paint(GraphicsWrapper context) {
         context.drawImage(
                 this.image,
-                this.middle.getX() - (this.size / 2),
-                this.middle.getY() - (this.size / 2),
-                size,
-                size
+                this.middle.getX() - (this.width / 2),
+                this.middle.getY() - (this.height / 2),
+                width,
+                height
         );
     }
 
@@ -47,11 +48,11 @@ public class Graphic extends Shape {
 
     @Override
     public boolean select(Position position) {
-        return isInside(this.middle, size, position);
+        return isInside(this.middle, width, height, position);
     }
 
-    private boolean isInside(Position middle, double size, Position position) {
-        return middle.getX() - (size / 2) < position.getX() && middle.getY() - (size / 2) < position.getY()
-                && middle.getX() + (size / 2) > position.getX() && middle.getY() + (size / 2) > position.getY();
+    private boolean isInside(Position middle, double width, double height, Position position) {
+        return middle.getX() - (width / 2) < position.getX() && middle.getY() - (height / 2) < position.getY()
+                && middle.getX() + (width / 2) > position.getX() && middle.getY() + (height / 2) > position.getY();
     }
 }

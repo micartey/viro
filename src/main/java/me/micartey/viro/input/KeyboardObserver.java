@@ -7,6 +7,7 @@ import dev.lukasl.jwinkey.enums.VirtualKey;
 import dev.lukasl.jwinkey.observables.KeyStateObservable;
 import me.micartey.jation.JationObserver;
 import me.micartey.viro.events.viro.SettingUpdateEvent;
+import me.micartey.viro.settings.GraphicImport;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.window.RadialMenu;
 import me.micartey.viro.window.Window;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
@@ -23,16 +25,19 @@ public class KeyboardObserver {
 
     private final JationObserver observer;
     private final RadialMenu     radialMenu;
+    private final GraphicImport  graphicImport;
     private final Settings       settings;
     private final Window         window;
 
     private KeyStateObservable toggleVisibility;
+    private KeyStateObservable toggleGraphicImport;
     private KeyStateObservable redoUndoObserver;
     private KeyStateObservable clearObserver;
 
-    public KeyboardObserver(Window window, Settings settings, RadialMenu radialMenu, JationObserver observer) {
+    public KeyboardObserver(Window window, Settings settings, GraphicImport graphicImport, RadialMenu radialMenu, JationObserver observer) {
         this.radialMenu = radialMenu;
         this.observer = observer;
+        this.graphicImport = graphicImport;
         this.settings = settings;
         this.window = window;
     }
@@ -45,6 +50,15 @@ public class KeyboardObserver {
 
         this.toggleVisibility = KeyStateObservable.of(Stream.concat(enable, disable).toArray(VirtualKey[]::new));
         this.toggleVisibility.subscribe(this::onVisibilityUpdate);
+    }
+
+    @SuppressWarnings("all")
+    @EventListener({ApplicationStartedEvent.class, SettingUpdateEvent.class})
+    public void updateGraphicObserver() {
+        Stream<VirtualKey> toggle = this.fromNames(settings.getOpenGraphicImport().stream());
+
+        this.toggleGraphicImport = KeyStateObservable.of(toggle.toArray(VirtualKey[]::new));
+        this.toggleGraphicImport.subscribe(this::onGraphicImport);
     }
 
     @SuppressWarnings("all")
@@ -116,11 +130,25 @@ public class KeyboardObserver {
         if(!update.getKeyState().equals(KeyState.PRESSED))
             return;
 
-        if (this.fromNames(this.settings.getClearSelection().stream()).allMatch(this.clearObserver::isPressed)) {
+        if(this.fromNames(this.settings.getClearSelection().stream()).allMatch(this.clearObserver::isPressed)) {
             this.window.getVisible().clear();
             this.window.getInvisible().clear();
             this.window.repaint();
         }
+    }
+
+    /**
+     * Consumer for key press {@link KeyStateObservable KeyStateObservable} to
+     * open graphic import window
+     *
+     * @param update {@link KeyStateUpdate}
+     */
+    private void onGraphicImport(KeyStateUpdate update) {
+        if(!update.getKeyState().equals(KeyState.PRESSED))
+            return;
+
+        if(this.fromNames(this.settings.getOpenGraphicImport().stream()).allMatch(this.toggleGraphicImport::isPressed))
+            PlatformImpl.runLater(this.graphicImport::show);
     }
 
     /**
