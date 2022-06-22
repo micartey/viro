@@ -96,6 +96,7 @@ public class KeyboardObserver {
         }
 
         if(this.fromNames(this.settings.getDisableSelection().stream()).allMatch(this.toggleVisibility::isPressed)) {
+            PlatformImpl.runLater(this.graphicImport.stage::hide);
             PlatformImpl.runLater(this.radialMenu.stage::hide);
             PlatformImpl.runLater(this.window.stage::hide);
         }
@@ -144,11 +145,12 @@ public class KeyboardObserver {
      * @param update {@link KeyStateUpdate}
      */
     private void onGraphicImport(KeyStateUpdate update) {
-        if(!update.getKeyState().equals(KeyState.PRESSED))
+        if(!update.getKeyState().equals(KeyState.PRESSED)
+                || !this.window.stage.isShowing())
             return;
 
         if(this.fromNames(this.settings.getOpenGraphicImport().stream()).allMatch(this.toggleGraphicImport::isPressed))
-            PlatformImpl.runLater(this.graphicImport::show);
+            PlatformImpl.runLater(this.graphicImport.stage::show);
     }
 
     /**
