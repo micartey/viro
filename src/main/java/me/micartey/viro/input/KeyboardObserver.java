@@ -149,8 +149,10 @@ public class KeyboardObserver {
                 || !this.window.stage.isShowing())
             return;
 
-        if(this.fromNames(this.settings.getOpenGraphicImport().stream()).allMatch(this.toggleGraphicImport::isPressed))
+        if(this.fromNames(this.settings.getOpenGraphicImport().stream()).allMatch(this.toggleGraphicImport::isPressed)) {
             PlatformImpl.runLater(this.graphicImport.stage::show);
+            PlatformImpl.runLater(this.graphicImport::reset);
+        }
     }
 
     /**
