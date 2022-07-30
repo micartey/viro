@@ -1,6 +1,9 @@
-name: Maven Package
+name: Update License
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 1 1 *"
 
 jobs:
   update-license-year:
