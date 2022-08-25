@@ -21,11 +21,24 @@
   </a>
 </div>
 
+<br />
+
+<p align="center">
+  <a href="#-introduction">Introduction</a> •
+  <a href="#-installation">Installation</a> •
+  <a href="https://github.com/Clientastisch/viro/issues">Troubleshooting</a>
+</p>
+
+
 ## 📚 Introduction
 
 Viro is a Java doodle application. It is based on the [Spring](https://spring.io/) framework and uses JavaFX for rendering.
 
 ![](images/preview.gif)
+
+### Motivation
+
+This project was created in order to have an overlay doodle application which is perfectly useful for screen sharing with the combination of drawing tablets.
 
 ## 🔎 Compatibility
 
