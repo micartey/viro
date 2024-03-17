@@ -29,6 +29,7 @@
   <a href="https://github.com/micartey/viro/issues">Troubleshooting</a>
 </p>
 
+> This is a WIP recode of viro for linux as I switched to linux and really missed this application a few times
 
 ## 📚 Introduction
 
@@ -39,33 +40,3 @@ Viro is a Java doodle application. It is based on the [Spring](https://spring.io
 ### Motivation
 
 This project was created in order to have an overlay doodle application which is perfectly useful for screen sharing with the combination of drawing tablets.
-
-## 🔎 Compatibility
-
-- [x] [Windows](https://www.microsoft.com/)
-- [x] [Java 8](https://github.com/AdoptOpenJDK/openjdk-jdk8u)
-
-## 💿 Installation
-
-To use viro, you must have Java installed or use the [bundled zip](https://github.com/micartey/viro/releases) available on the release tab. In case you downloaded the source and want to compile it, make sure to have `maven` installed and run:
-
-**(This step is only optional)**
-```bash
-$ mvn package -B -ntp -DskipTests=true -f pom.xml
-```
-
-## ⚙ Settings
-
-Viro uses [PreferenceFx](https://github.com/dlsc-software-consulting-gmbh/PreferencesFX) to store, display and load settings. You Also have the possibility to set your own keybindings.
-
-![](images/settings.png)
-
-## ⌨ Default Keybindings
-
-| Key | Action |
-| --- | --- |
-| `ALT + PAUSE` | Show |
-| `ESC` | Hide |
-| `DELETE` | Clear Canvas |
-| `STRG + Z` | Undo |
-| `STRG + Y` | Redo |
