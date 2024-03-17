@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @Component
-public class Brushbar {
+public class StrokeWidthPopup {
 
     private final RadialMenu radialMenu;
     private final Window     window;
@@ -25,7 +25,7 @@ public class Brushbar {
     private final long stay;
     private       long time;
 
-    public Brushbar(@Value("${viro.brushbar.icon}") String icon, @Value("${viro.brushbar.title}") String title, @Value("${viro.brushbar.stay}") Integer stay, Window window, RadialMenu radialMenu, Settings settings) {
+    public StrokeWidthPopup(@Value("${viro.brushbar.stay}") Integer stay, Window window, RadialMenu radialMenu, Settings settings) {
         this.radialMenu = radialMenu;
         this.settings = settings;
         this.window = window;
