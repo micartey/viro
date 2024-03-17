@@ -67,6 +67,13 @@ public class MouseObserver {
      * @param event {@link ScrollEvent ScrollEvent}
      */
     private void onScroll(ScrollEvent event) {
+        /*
+         * A delta Y of 0 is impossible if you are scrolling.
+         * I do not know why this happens, but we will ignore it!
+         */
+        if (event.getDeltaY() == 0)
+            return;
+
         MouseScrollEvent scrollEvent = new MouseScrollEvent(event.getDeltaY() > 0 ? 1 : -1);
 
         scrollEvent.publish(

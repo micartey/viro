@@ -48,7 +48,7 @@ public class Brushbar {
         this.window.group.getChildren().add(this.canvas);
     }
 
-    private void draw() {
+    private synchronized void draw() {
         this.graphics.reset();
 
         this.graphics.setColor(settings.getEditorColor().get());
@@ -63,7 +63,9 @@ public class Brushbar {
                 50
         );
 
-        this.graphics.setLineWidth(this.window.getPreviewGraphics().getLineWidth());
+        int width = this.window.getPreviewGraphics().getLineWidth();
+
+        this.graphics.setLineWidth(width);
         this.graphics.setColor(this.radialMenu.getColor());
 
         this.graphics.drawLine(10, 45, 20, 10);
@@ -86,6 +88,8 @@ public class Brushbar {
                 35,
                 16
         );
+
+        this.graphics.setLineWidth(width);
     }
 
     @EventListener(MouseScrollEvent.class)

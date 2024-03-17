@@ -7,13 +7,13 @@
       height="30"
     />
   </a>
-  <a href="https://github.com/Clientastisch/viro/actions/workflows/maven-publish.yml" target="_blank">
+  <a href="https://github.com/micartey/viro/actions/workflows/maven-publish.yml" target="_blank">
     <img
       src="https://img.shields.io/badge/actions-build-%27a147?style=for-the-badge"
       height="30"
     />
   </a>
-  <a href="https://clientastisch.github.io/viro/docs" target="_blank">
+  <a href="https://micartey.github.io/viro/docs" target="_blank">
     <img
       src="https://img.shields.io/badge/javadoc-reference-5272B4.svg?style=for-the-badge"
       height="30"
@@ -26,7 +26,7 @@
 <p align="center">
   <a href="#-introduction">Introduction</a> •
   <a href="#-installation">Installation</a> •
-  <a href="https://github.com/Clientastisch/viro/issues">Troubleshooting</a>
+  <a href="https://github.com/micartey/viro/issues">Troubleshooting</a>
 </p>
 
 
@@ -47,7 +47,7 @@ This project was created in order to have an overlay doodle application which is
 
 ## 💿 Installation
 
-To use viro, you must have Java installed or use the [bundled zip](https://github.com/Clientastisch/viro/releases) available on the release tab. In case you downloaded the source and want to compile it, make sure to have `maven` installed and run:
+To use viro, you must have Java installed or use the [bundled zip](https://github.com/micartey/viro/releases) available on the release tab. In case you downloaded the source and want to compile it, make sure to have `maven` installed and run:
 
 **(This step is only optional)**
 ```bash

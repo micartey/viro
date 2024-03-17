@@ -14,19 +14,19 @@ public class Tray {
 
     @SneakyThrows
     public Tray(Settings settings, @Value("${application.title}") String title, @Value("${application.icon}") String icon) {
-        SystemTray systemTray = SystemTray.getSystemTray();
-
-        TrayIcon trayIcon = new TrayIcon(
-                Application.toolkit.getImage(Tray.class.getResource(icon)),
-                title
-        );
-
-        trayIcon.setImageAutoSize(true);
-
-        systemTray.add(trayIcon);
-
-        trayIcon.addActionListener(event -> {
-            PlatformImpl.runLater(settings::show);
-        });
+//        SystemTray systemTray = SystemTray.getSystemTray();
+//
+//        TrayIcon trayIcon = new TrayIcon(
+//                Application.toolkit.getImage(Tray.class.getResource(icon)),
+//                title
+//        );
+//
+//        trayIcon.setImageAutoSize(true);
+//
+//        systemTray.add(trayIcon);
+//
+//        trayIcon.addActionListener(event -> {
+//            PlatformImpl.runLater(settings::show);
+//        });
     }
 }

@@ -25,7 +25,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.IntStream;
 
-@Component
+//@Component
 public class Toolbar {
 
     private final RadialMenu radialMenu;
@@ -52,9 +52,15 @@ public class Toolbar {
         );
 
         this.canvas = new Canvas();
+        this.canvas.setHeight(this.window.getHeight());
+        this.canvas.setWidth(50);
+
         this.graphics = new GraphicsWrapper(this.canvas.getGraphicsContext2D());
 
         this.overlay = new Canvas();
+        this.overlay.setHeight(this.window.getHeight());
+        this.overlay.setWidth(50);
+
         this.overlayGraphics = new GraphicsWrapper(this.overlay.getGraphicsContext2D());
 
         this.overlay.addEventHandler(MouseEvent.MOUSE_RELEASED, this::onClick);
@@ -62,12 +68,6 @@ public class Toolbar {
 
     @PostConstruct
     private void setup() {
-        this.canvas.setHeight(this.window.getHeight());
-        this.canvas.setWidth(50);
-
-        this.overlay.setHeight(this.window.getHeight());
-        this.overlay.setWidth(50);
-
         this.window.group.getChildren().addAll(this.canvas, this.overlay);
     }
 

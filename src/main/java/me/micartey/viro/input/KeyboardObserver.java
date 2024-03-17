@@ -7,7 +7,6 @@ import dev.lukasl.jwinkey.enums.VirtualKey;
 import dev.lukasl.jwinkey.observables.KeyStateObservable;
 import me.micartey.jation.JationObserver;
 import me.micartey.viro.events.viro.SettingUpdateEvent;
-import me.micartey.viro.settings.GraphicImport;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.window.RadialMenu;
 import me.micartey.viro.window.Window;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
@@ -25,7 +23,6 @@ public class KeyboardObserver {
 
     private final JationObserver observer;
     private final RadialMenu     radialMenu;
-    private final GraphicImport  graphicImport;
     private final Settings       settings;
     private final Window         window;
 
@@ -34,12 +31,13 @@ public class KeyboardObserver {
     private KeyStateObservable redoUndoObserver;
     private KeyStateObservable clearObserver;
 
-    public KeyboardObserver(Window window, Settings settings, GraphicImport graphicImport, RadialMenu radialMenu, JationObserver observer) {
+    public KeyboardObserver(Window window, Settings settings, RadialMenu radialMenu, JationObserver observer) {
         this.radialMenu = radialMenu;
         this.observer = observer;
-        this.graphicImport = graphicImport;
         this.settings = settings;
         this.window = window;
+
+        this.window.stage.show();
     }
 
     @SuppressWarnings("all")
@@ -96,7 +94,6 @@ public class KeyboardObserver {
         }
 
         if(this.fromNames(this.settings.getDisableSelection().stream()).allMatch(this.toggleVisibility::isPressed)) {
-            PlatformImpl.runLater(this.graphicImport.stage::hide);
             PlatformImpl.runLater(this.radialMenu.stage::hide);
             PlatformImpl.runLater(this.window.stage::hide);
         }
@@ -150,8 +147,6 @@ public class KeyboardObserver {
             return;
 
         if(this.fromNames(this.settings.getOpenGraphicImport().stream()).allMatch(this.toggleGraphicImport::isPressed)) {
-            PlatformImpl.runLater(this.graphicImport.stage::show);
-            PlatformImpl.runLater(this.graphicImport::reset);
         }
     }
 

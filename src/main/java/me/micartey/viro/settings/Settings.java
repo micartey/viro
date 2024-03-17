@@ -5,23 +5,18 @@ import com.dlsc.preferencesfx.PreferencesFxEvent;
 import com.dlsc.preferencesfx.model.Category;
 import com.dlsc.preferencesfx.model.Group;
 import com.dlsc.preferencesfx.model.Setting;
-import com.dlsc.preferencesfx.view.PreferencesFxDialog;
 import dev.lukasl.jwinkey.enums.VirtualKey;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import me.micartey.viro.events.viro.SettingUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -30,7 +25,7 @@ import java.util.stream.Collectors;
 @Component
 public class Settings {
 
-    private final ObjectProperty<Color> backgroundColor = new SimpleObjectProperty<>(Color.color(.2, .2, .2));
+    private final ObjectProperty<Color> backgroundColor = new SimpleObjectProperty<>(Color.color(.2, .2, .2, .2));
 
     private final ListProperty<String> keybindings = new SimpleListProperty<>(FXCollections.observableList(
             Arrays.stream(VirtualKey.values()).map(VirtualKey::name).map(name -> name.substring(3)).collect(Collectors.toList())
@@ -86,18 +81,6 @@ public class Settings {
         this.preferencesFx.addEventHandler(PreferencesFxEvent.EVENT_PREFERENCES_SAVED, handler -> {
             this.context.publishEvent(new SettingUpdateEvent(this));
         });
-    }
-
-    @SneakyThrows
-    @PostConstruct
-    public void injectMouseEvent() {
-        Field field = PreferencesFx.class.getDeclaredField("preferencesFxDialog");
-        field.setAccessible(true);
-        PreferencesFxDialog dialog = (PreferencesFxDialog) field.get(preferencesFx);
-        dialog.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
-            preferencesFx.saveSettings();
-        });
-        field.setAccessible(false);
     }
 
     private PreferencesFx createPreferences() {

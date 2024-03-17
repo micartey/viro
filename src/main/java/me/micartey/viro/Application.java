@@ -18,12 +18,12 @@ public class Application extends javafx.application.Application {
 
     private static ApplicationContext context;
 
-    public static Toolkit toolkit;
-    public static Robot robot;
+//    public static Toolkit toolkit;
+//    public static Robot robot;
 
     public static void main(String[] arguments) throws AWTException {
-        toolkit = Toolkit.getDefaultToolkit();
-        robot = new Robot();
+//        toolkit = Toolkit.getDefaultToolkit();
+//        robot = new Robot();
 
         launch(arguments);
     }
