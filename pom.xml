@@ -100,12 +100,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.lukasl-dev</groupId>
-            <artifactId>jwinkey</artifactId>
-            <version>1.0.6</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.reactivex.rxjava3</groupId>
             <artifactId>rxjava</artifactId>
             <version>3.0.11</version>
