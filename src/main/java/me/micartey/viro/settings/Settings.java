@@ -58,78 +58,6 @@ public class Settings {
 
     @Getter private final IntegerProperty smoothness = new SimpleIntegerProperty(5);
 
-    private final PreferencesFx preferencesFx;
-
-    @Autowired
-    private ApplicationContext context;
-
-    public Settings(@Value("${application.icon}") String icon, @Value("${application.css}") String css) {
-        this.preferencesFx = this.createPreferences()
-                .dialogTitle("Settings")
-                .instantPersistent(true)
-                .buttonsVisibility(false)
-                .saveSettings(true);
-
-        this.preferencesFx.getView().getScene().getStylesheets().add(
-                Objects.requireNonNull(Settings.class.getResource(css)).toExternalForm()
-        );
-
-        this.preferencesFx.dialogIcon(new Image(
-                Objects.requireNonNull(Settings.class.getResourceAsStream(icon))
-        ));
-
-        this.preferencesFx.addEventHandler(PreferencesFxEvent.EVENT_PREFERENCES_SAVED, handler -> {
-            this.context.publishEvent(new SettingUpdateEvent(this));
-        });
-    }
-
-    private PreferencesFx createPreferences() {
-        return PreferencesFx.of(Settings.class,
-                Category.of("General",
-                        Group.of("Editor",
-                                Setting.of("Editor Color", editorColor),
-                                Setting.of("Icon Color", iconColor)
-                        ),
-                        Group.of("Background",
-                                Setting.of("Color", backgroundColor)
-                        ),
-                        Group.of("Drawing",
-                                Setting.of("Smoothness", smoothness, 1, 20)
-                        )
-                ).subCategories(
-                        Category.of("Keybindings",
-                                Group.of("Visibility",
-                                        Setting.of("Show",
-                                                keybindings,
-                                                enableSelection
-                                        ),
-                                        Setting.of("Hide",
-                                                keybindings,
-                                                disableSelection
-                                        )
-                                ),
-                                Group.of("Editor",
-                                        Setting.of("Import Graphics",
-                                                keybindings,
-                                                openGraphicImport
-                                        ),
-                                        Setting.of("Undo",
-                                                keybindings,
-                                                undoSelection
-                                        ),
-                                        Setting.of("Redo",
-                                                keybindings,
-                                                redoSelection
-                                        ),
-                                        Setting.of("Clear",
-                                                keybindings,
-                                                clearSelection
-                                        )
-                                )
-                        )
-                ).expand()
-        );
-    }
 
     public Color getBackgroundColor() {
         Color color = backgroundColor.get();
@@ -139,9 +67,5 @@ public class Settings {
                 color.getBlue(),
                 Math.max(0.01, color.getOpacity())
         );
-    }
-
-    public void show() {
-        this.preferencesFx.show();
     }
 }

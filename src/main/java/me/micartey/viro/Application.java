@@ -27,7 +27,7 @@ public class Application extends javafx.application.Application {
 
     @EventListener(ApplicationStartedEvent.class)
     public void setup() {
-        Platform.setImplicitExit(false);
+//        Platform.setImplicitExit(false);
 
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(() -> {

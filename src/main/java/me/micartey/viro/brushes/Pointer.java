@@ -63,13 +63,10 @@ public class Pointer extends Brush {
             if (last == null)
                 return;
 
-            double alpha = (double) Math.min(500 / Math.max(System.currentTimeMillis() - time, 1) * 5, 255) / 255;
-
             graphics.setColor(Color.color(
                     graphics.getColor().getRed(),
                     graphics.getColor().getGreen(),
-                    graphics.getColor().getBlue(),
-                    alpha
+                    graphics.getColor().getBlue()
             ));
 
             graphics.drawLine(

@@ -55,7 +55,12 @@ public class Window extends CanvasWrapper {
         this.settings = settings;
 
         this.previewGraphics.setLineWidth(width);
-        this.stage.setAlwaysOnTop(true);
+
+        // TODO: Add configuration for this
+//        this.stage.setAlwaysOnTop(true);
+        this.stage.setOnCloseRequest((event) -> {
+            System.exit(0);
+        });
 
         this.observer.subscribe(this);
     }
@@ -67,6 +72,8 @@ public class Window extends CanvasWrapper {
     public void onSettingsUpdate() {
         this.setBackground(this.settings.getBackgroundColor());
         this.repaint();
+
+        this.stage.show();
     }
 
     /**

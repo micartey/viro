@@ -36,8 +36,6 @@ public class KeyboardObserver {
         this.observer = observer;
         this.settings = settings;
         this.window = window;
-
-        this.window.stage.show();
     }
 
     @SuppressWarnings("all")
