@@ -22,9 +22,6 @@ public class Pointer extends Brush {
 
     private final Map<Position, Long> positions;
 
-    @Value("${viro.brush.pointer.width}")
-    private Integer width;
-
     @Value("${viro.brush.pointer.duration}")
     private Double duration;
 
@@ -49,7 +46,7 @@ public class Pointer extends Brush {
         graphics.reset();
 
         int width = graphics.getLineWidth();
-        graphics.setLineWidth(this.width);
+        graphics.setLineWidth(Math.max(3, width));
 
         AtomicReference<Position> reference = new AtomicReference<>();
         new LinkedHashMap<>(this.positions).forEach((position, time) -> {

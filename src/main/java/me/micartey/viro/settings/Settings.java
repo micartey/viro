@@ -1,25 +1,14 @@
 package me.micartey.viro.settings;
 
-import com.dlsc.preferencesfx.PreferencesFx;
-import com.dlsc.preferencesfx.PreferencesFxEvent;
-import com.dlsc.preferencesfx.model.Category;
-import com.dlsc.preferencesfx.model.Group;
-import com.dlsc.preferencesfx.model.Setting;
 import dev.lukasl.jwinkey.enums.VirtualKey;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import lombok.Getter;
-import me.micartey.viro.events.viro.SettingUpdateEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component

@@ -36,7 +36,7 @@ public class RadialMenu extends CanvasWrapper {
     @Autowired
     private ApplicationContext context;
 
-    public RadialMenu(@Value("${viro.radialMenu.icon}") String icon, @Value("${viro.radialMenu.title}") String title, @Value("${viro.radialMenu.image}") String image, @Value("${viro.radialMenu.radius}") Integer radius, List<Brush> brushes) {
+    public RadialMenu(@Value("${application.icon}") String icon, @Value("${viro.radialMenu.title}") String title, @Value("${viro.radialMenu.image}") String image, @Value("${viro.radialMenu.radius}") Integer radius, List<Brush> brushes) {
         super(icon, title, new Position(0, 0), new Position(
                 500,
                 500
