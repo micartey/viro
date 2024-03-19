@@ -37,7 +37,7 @@ jobs:
 
       - name: Get short SHA
         id: short-sha
-        run: echo "SHORT_SHA=${GITHUB_SHA:0:8}" >> $GITHUB_ENV
+        run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
