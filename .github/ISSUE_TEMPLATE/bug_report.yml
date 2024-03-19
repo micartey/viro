@@ -31,9 +31,8 @@ body:
       label: Scope
       description: Where is the bug located?
       options:
-        - Source
+        - Source Code
         - Dependency
-        - Linux
         - Somewhere else
     validations:
       required: true
