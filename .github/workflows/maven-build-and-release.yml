@@ -35,14 +35,18 @@ jobs:
               core.setFailed('No JAR file found');
             }
 
+      - name: Get short SHA
+        id: short-sha
+        run: echo "SHORT_SHA=${GITHUB_SHA:0:8}" >> $GITHUB_ENV
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.run_id }}-${{ github.sha }}
-          release_name: commit-${{ github.sha }}.substring(0,5)
+          tag_name: ${{ env.SHORT_SHA }}
+          release_name: ${{ env.SHORT_SHA }}
           draft: true
           prerelease: false
 
