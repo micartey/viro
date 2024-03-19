@@ -46,12 +46,12 @@ public class KeyboardObserver {
     public void subscribeToKeyboardEvents() {
         this.window.getScene().setOnKeyPressed(event -> {
             pressedKeys.add(event.getCode());
-
-            KeyPressEvent keyPressEvent = new KeyPressEvent(new HashSet<>(pressedKeys));
-            context.publishEvent(keyPressEvent);
         });
 
         this.window.getScene().setOnKeyReleased(event -> {
+            KeyPressEvent keyPressEvent = new KeyPressEvent(new HashSet<>(pressedKeys));
+            context.publishEvent(keyPressEvent);
+
             pressedKeys.remove(event.getCode());
         });
     }
