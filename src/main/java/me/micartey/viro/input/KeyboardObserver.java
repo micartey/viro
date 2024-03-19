@@ -1,15 +1,10 @@
 package me.micartey.viro.input;
 
-import com.sun.javafx.application.PlatformImpl;
-import dev.lukasl.jwinkey.components.KeyStateUpdate;
-import dev.lukasl.jwinkey.enums.KeyState;
-import dev.lukasl.jwinkey.enums.VirtualKey;
-import dev.lukasl.jwinkey.observables.KeyStateObservable;
 import javafx.scene.input.KeyCode;
 import me.micartey.jation.JationObserver;
 import me.micartey.viro.events.viro.KeyPressEvent;
-import me.micartey.viro.events.viro.SettingUpdateEvent;
 import me.micartey.viro.settings.Settings;
+import me.micartey.viro.window.GraphicsImport;
 import me.micartey.viro.window.RadialMenu;
 import me.micartey.viro.window.Window;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +13,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.awt.event.KeyEvent;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class KeyboardObserver {
 
     private final JationObserver observer;
+    private final GraphicsImport graphicsImport;
     private final RadialMenu     radialMenu;
     private final Settings       settings;
     private final Window         window;
@@ -37,7 +32,8 @@ public class KeyboardObserver {
     @Autowired
     private ApplicationContext context;
 
-    public KeyboardObserver(Window window, Settings settings, RadialMenu radialMenu, JationObserver observer) {
+    public KeyboardObserver(Window window, Settings settings, RadialMenu radialMenu, GraphicsImport graphicsImport, JationObserver observer) {
+        this.graphicsImport = graphicsImport;
         this.radialMenu = radialMenu;
         this.observer = observer;
         this.settings = settings;
@@ -47,7 +43,7 @@ public class KeyboardObserver {
     }
 
     @EventListener({ApplicationStartedEvent.class})
-    public void setupKeyboardEvents() {
+    public void subscribeToKeyboardEvents() {
         this.window.getScene().setOnKeyPressed(event -> {
             pressedKeys.add(event.getCode());
 
@@ -78,6 +74,17 @@ public class KeyboardObserver {
             return;
 
         this.window.redo();
+    }
+
+    @EventListener({KeyPressEvent.class})
+    public void onImport(KeyPressEvent event) {
+        Set<KeyCode> importSet = this.settings.getGraphicImportSelection();
+
+        if (!event.getKeyCodes().containsAll(importSet))
+            return;
+
+        this.graphicsImport.stage.show();
+        this.graphicsImport.resize();
     }
 
 //    @SuppressWarnings("all")
