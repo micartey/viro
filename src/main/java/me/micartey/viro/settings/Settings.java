@@ -19,7 +19,7 @@ public class Settings {
     private final ObjectProperty<Color> backgroundColor = new SimpleObjectProperty<>(Color.color(.2, .2, .2, .2));
 
     @Getter private final Set<KeyCode> graphicImportSelection = new HashSet<>(Arrays.asList(
-            KeyCode.CONTROL, KeyCode.I
+            KeyCode.CONTROL, KeyCode.SHIFT, KeyCode.I
     ));
 
     @Getter private final Set<KeyCode> undoSelection = new HashSet<>(Arrays.asList(
