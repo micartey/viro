@@ -1,7 +1,7 @@
 package me.micartey.viro.shapes;
 
 import javafx.scene.paint.Color;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 
 import java.util.*;

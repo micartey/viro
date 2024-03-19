@@ -4,7 +4,7 @@ import me.micartey.jation.JationObserver;
 import me.micartey.jation.annotations.Observe;
 import me.micartey.viro.events.mouse.MouseDragEvent;
 import me.micartey.viro.window.Window;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

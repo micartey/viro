@@ -9,7 +9,7 @@ import lombok.Getter;
 import me.micartey.viro.brushes.Brush;
 import me.micartey.viro.events.viro.BrushSelectEvent;
 import me.micartey.viro.events.viro.ColorSelectEvent;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.CanvasWrapper;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

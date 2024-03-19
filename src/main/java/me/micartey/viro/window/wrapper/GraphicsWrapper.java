@@ -7,7 +7,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 
 import java.util.Arrays;
 

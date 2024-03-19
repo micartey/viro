@@ -9,7 +9,7 @@ import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.Path;
 import me.micartey.viro.window.RadialMenu;
 import me.micartey.viro.window.Window;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;

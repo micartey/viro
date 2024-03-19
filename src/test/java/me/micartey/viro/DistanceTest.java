@@ -1,6 +1,6 @@
 package me.micartey.viro;
 
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import org.junit.jupiter.api.Test;
 
 class DistanceTest {

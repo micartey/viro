@@ -1,4 +1,4 @@
-package me.micartey.viro.window.utilities;
+package me.micartey.viro.shapes.utilities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -72,13 +72,13 @@ public class Position implements Serializable {
         );
     }
 
-    /**
-     *
-     * @param vector
-     * @param factor
-     * @return
-     */
-    public Position multiply(double factor) {
+  /**
+   * Multiply a vector with a factor
+   *
+   * @param factor multiplier
+   * @return resulting Position
+   */
+  public Position multiply(double factor) {
         return new Position(
                 this.x * factor,
                 this.y * factor
@@ -116,7 +116,13 @@ public class Position implements Serializable {
         return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     }
 
-    public Position normalize() {
+  /**
+   * Normalize position.
+   * The resulting position will have a {@link Position#getLength()} of 1
+   *
+   * @return normalized position
+   */
+  public Position normalize() {
         return new Position(
                 this.x / this.getLength(),
                 this.y / this.getLength()

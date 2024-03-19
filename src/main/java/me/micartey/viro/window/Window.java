@@ -1,6 +1,5 @@
 package me.micartey.viro.window;
 
-import com.sun.javafx.application.PlatformImpl;
 import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -15,7 +14,7 @@ import me.micartey.viro.events.mouse.MouseScrollEvent;
 import me.micartey.viro.events.viro.*;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.Shape;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.CanvasWrapper;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;

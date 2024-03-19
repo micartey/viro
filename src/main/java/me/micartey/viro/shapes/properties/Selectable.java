@@ -1,6 +1,6 @@
 package me.micartey.viro.shapes.properties;
 
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 
 public interface Selectable {
 

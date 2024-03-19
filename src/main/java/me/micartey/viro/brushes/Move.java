@@ -9,7 +9,7 @@ import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.window.Window;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

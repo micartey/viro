@@ -3,7 +3,7 @@ package me.micartey.viro.shapes;
 import javafx.scene.paint.Color;
 import me.micartey.viro.shapes.properties.Drawable;
 import me.micartey.viro.shapes.properties.Movable;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 
 import java.io.Serializable;

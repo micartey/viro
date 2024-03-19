@@ -7,14 +7,13 @@ import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.shapes.Polygon;
 import me.micartey.viro.window.RadialMenu;
 import me.micartey.viro.window.Window;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

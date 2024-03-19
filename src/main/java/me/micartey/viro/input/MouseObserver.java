@@ -9,7 +9,7 @@ import me.micartey.viro.events.mouse.*;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.window.RadialMenu;
 import me.micartey.viro.window.Window;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

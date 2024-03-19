@@ -10,7 +10,7 @@ import javafx.stage.Screen;
 import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.viro.ShapeSubmitEvent;
 import me.micartey.viro.shapes.Graphic;
-import me.micartey.viro.window.utilities.Position;
+import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.CanvasWrapper;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
