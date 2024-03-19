@@ -1,9 +1,11 @@
 /.idea/
 /target/
 /runtime/
+/.sdk
 
 *.iml
 *.bat
+*.so
 
 HELP.md
 

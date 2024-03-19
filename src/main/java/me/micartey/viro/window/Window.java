@@ -55,7 +55,12 @@ public class Window extends CanvasWrapper {
         this.settings = settings;
 
         this.previewGraphics.setLineWidth(width);
-        this.stage.setAlwaysOnTop(true);
+
+        // TODO: Add configuration for this
+//        this.stage.setAlwaysOnTop(true);
+        this.stage.setOnCloseRequest((event) -> {
+            System.exit(0);
+        });
 
         this.observer.subscribe(this);
     }
@@ -67,6 +72,8 @@ public class Window extends CanvasWrapper {
     public void onSettingsUpdate() {
         this.setBackground(this.settings.getBackgroundColor());
         this.repaint();
+
+        this.stage.show();
     }
 
     /**
@@ -148,7 +155,8 @@ public class Window extends CanvasWrapper {
     @Observe
     public void onClick(MousePressEvent event, RadialMenu radialMenu) {
         if(radialMenu.stage.isShowing())
-            PlatformImpl.runLater(radialMenu.stage::hide);
+//            PlatformImpl.runLater(radialMenu.stage::hide);
+            radialMenu.stage.hide();
 
         if(!event.getMouseButton().equals(MouseButton.SECONDARY))
             return;
@@ -160,7 +168,8 @@ public class Window extends CanvasWrapper {
                 event.getPosition().getY() - radialMenu.getHeight() / 2
         ));
 
-        PlatformImpl.runLater(radialMenu.stage::show);
+//        PlatformImpl.runLater(radialMenu.stage::show);
+        radialMenu.stage.show();
     }
 
     /**

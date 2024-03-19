@@ -42,7 +42,7 @@ public class Pencil extends Brush {
     public void onDrag(MouseDragEvent event, Window window) {
         GraphicsWrapper wrapper = window.getPreviewGraphics();
 
-        Position lastPosition = this.positions.size() > 0 ? this.positions.keySet().toArray(new Position[]{})[this.positions.size() - 1] : event.getSource();
+        Position lastPosition = !this.positions.isEmpty() ? this.positions.keySet().toArray(new Position[]{})[this.positions.size() - 1] : event.getSource();
         Position position = new Position(
                 lastPosition.getX() + ((event.getDestination().getX() - lastPosition.getX()) / this.settings.getSmoothness().get()),
                 lastPosition.getY() + ((event.getDestination().getY() - lastPosition.getY()) / this.settings.getSmoothness().get())

@@ -1,0 +1,61 @@
+name: Build and Release JAR
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21 (Zulu)
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+
+      - name: Build with Maven
+        run: mvn package -B -DskipTests=true -f pom.xml
+
+      - name: Find JAR file
+        id: find-jar
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const fs = require('fs');
+            const files = fs.readdirSync('./target').filter(fn => fn.endsWith('.jar'));
+            if (files.length > 0) {
+              core.setOutput('jar_name', files[0]);
+            } else {
+              core.setFailed('No JAR file found');
+            }
+
+      - name: Get short SHA
+        id: short-sha
+        run: echo "SHORT_SHA=${GITHUB_SHA:0:8}" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.SHORT_SHA }}
+          release_name: ${{ env.SHORT_SHA }}
+          draft: false
+          prerelease: true
+
+      - name: Upload JAR to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/${{ steps.find-jar.outputs.jar_name }}
+          asset_name: ${{ steps.find-jar.outputs.jar_name }}
+          asset_content_type: application/java-archive

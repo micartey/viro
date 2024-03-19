@@ -73,6 +73,19 @@ public class Position implements Serializable {
     }
 
     /**
+     *
+     * @param vector
+     * @param factor
+     * @return
+     */
+    public Position multiply(double factor) {
+        return new Position(
+                this.x * factor,
+                this.y * factor
+        );
+    }
+
+    /**
      * Apply a vector to the current {@link Position position}
      * object
      *
@@ -96,6 +109,17 @@ public class Position implements Serializable {
         return new Position(
                 destination.x - this.x,
                 destination.y - this.y
+        );
+    }
+
+    public double getLength() {
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
+    public Position normalize() {
+        return new Position(
+                this.x / this.getLength(),
+                this.y / this.getLength()
         );
     }
 }

@@ -49,6 +49,16 @@ public class Ruler extends Brush {
 
         Map<Position, Integer> points = new LinkedHashMap<>();
         points.put(this.origin, window.getPreviewGraphics().getLineWidth());
+
+        /*
+         * Fill point in between to make erasing possible
+         * This does not change anything in terms of visuals
+         */
+        Position direction = this.origin.direction(this.destination).normalize();
+        for (double step = 0; step < this.origin.distance(this.destination); step += 3) {
+            points.put(this.origin.translate(direction.multiply(step)), window.getPreviewGraphics().getLineWidth());
+        }
+
         points.put(this.destination, window.getPreviewGraphics().getLineWidth());
 
         this.submit(new Path(
@@ -62,8 +72,10 @@ public class Ruler extends Brush {
     }
 
     private void draw(GraphicsWrapper wrapper) {
-        wrapper.reset();
+        if (this.destination == null || this.origin == null)
+            return;
 
+        wrapper.reset();
         wrapper.drawLine(this.origin.getX(), this.origin.getY(), this.destination.getX(), this.destination.getY());
     }
 }
