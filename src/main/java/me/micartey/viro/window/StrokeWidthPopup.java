@@ -42,7 +42,7 @@ public class StrokeWidthPopup {
         );
 
         this.canvas.setLayoutY(
-                this.window.getHeight() - this.canvas.getHeight() - 40
+                this.window.getHeight() - this.canvas.getHeight() - 80
         );
 
         this.window.group.getChildren().add(this.canvas);
