@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="#-introduction">Introduction</a> •
-  <a href="#-installation">Installation</a> •
+  <a href="#-setup">Setup</a> •
   <a href="https://github.com/micartey/viro/issues">Troubleshooting</a>
 </p>
 
@@ -27,9 +27,7 @@
 
 viro is a java overlay doodle application meant to quickly draw and highlight things in screen sharings or recordings.
 
-![](images/preview.gif)
-
-### Setup
+### Setup for Development
 
 1. Create a `.sdk` folder
 2. Download a [javafx-sdk](https://gluonhq.com/products/javafx/) and extract it into the `.sdk` folder. 
@@ -38,3 +36,12 @@ The resulting structure should be: `.sdk/<your-fx-sdk>/lib`
 ```
 --module-path ./.sdk/<your-fx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics
 ```
+
+### Setup for Personal Use
+
+Go to the [releases](https://github.com/micartey/viro/releases) and download the newest version of viro. 
+This can either be a commit or the latest stable version.
+As both should work you can choose for yourself.
+
+You also need to have a Java version newer or equal to Java 17.
+As you also need the binaries for fx, you should consider the zulu distribution if you current jdk isn't able to run the jar file.
