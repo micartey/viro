@@ -13,12 +13,6 @@
       height="30"
     />
   </a>
-  <a href="https://micartey.github.io/viro/docs" target="_blank">
-    <img
-      src="https://img.shields.io/badge/javadoc-reference-5272B4.svg?style=for-the-badge"
-      height="30"
-    />
-  </a>
 </div>
 
 <br />
@@ -29,14 +23,18 @@
   <a href="https://github.com/micartey/viro/issues">Troubleshooting</a>
 </p>
 
-> This is a WIP recode of viro for linux as I switched to linux and really missed this application a few times
-
 ## 📚 Introduction
 
-Viro is a Java doodle application. It is based on the [Spring](https://spring.io/) framework and uses JavaFX for rendering.
+viro is a java overlay doodle application meant to quickly draw and highlight things in screen sharings or recordings.
 
 ![](images/preview.gif)
 
-### Motivation
+### Setup
 
-This project was created in order to have an overlay doodle application which is perfectly useful for screen sharing with the combination of drawing tablets.
+1. Create a `.sdk` folder
+2. Download a [javafx-sdk](https://gluonhq.com/products/javafx/) and extract it into the `.sdk` folder. 
+The resulting structure should be: `.sdk/<your-fx-sdk>/lib`
+3. Edit the Run configuration in your idea and add the following JVM flag
+```
+--module-path ./.sdk/<your-fx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics
+```
