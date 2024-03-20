@@ -51,7 +51,7 @@ jobs:
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os-name }}-viro.jar
+          name: ${{ matrix.os-name }}
           path: ./target/${{ matrix.os-name }}-viro.jar
 
   release:
@@ -66,10 +66,6 @@ jobs:
       - name: Get short SHA
         id: short-sha
         run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
-  
-      - name: List files
-        id: list_files
-        run: ls -lsr target/linux-viro.jar
 
       - name: Create Release
         id: create_release
@@ -88,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/linux-viro.jar
+          asset_path: ./target/linux/linux-viro.jar
           asset_name: viro-linux-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
@@ -98,7 +94,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/windows-viro.jar
+          asset_path: ./target/windows/windows-viro.jar
           asset_name: viro-windows-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
