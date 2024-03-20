@@ -12,10 +12,9 @@ import me.micartey.jation.JationObserver;
 import me.micartey.jation.annotations.Observe;
 import me.micartey.viro.events.mouse.MouseMoveEvent;
 import me.micartey.viro.events.mouse.MousePressEvent;
+import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.Window;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +29,15 @@ public class IconButton {
 
     private final DropShadow effect = new DropShadow(18, Color.rgb(200, 200, 200));
 
-    private Color  color = Color.rgb(14, 14, 14);
     private String icon;
+    private Color  color;
 
     private int size = 30;
     private int x, y;
 
-    public IconButton(Window window, JationObserver jationObserver) {
+    public IconButton(Window window, JationObserver jationObserver, Settings settings) {
+        this.listeners = new ArrayList<>();
+
         /*
          * Create a new overlay canvas
          * We need to propagate the mouse events to the underlaying canvas (preview canvas)
@@ -45,7 +46,7 @@ public class IconButton {
         canvas.setMouseTransparent(true);
 
         this.graphicsContext = canvas.getGraphicsContext2D();
-        this.listeners = new ArrayList<>();
+        this.color = settings.getEditorColor().get();
 
         jationObserver.subscribe(this);
     }

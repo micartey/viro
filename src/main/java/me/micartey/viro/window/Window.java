@@ -43,7 +43,7 @@ public class Window extends CanvasWrapper {
     public Window(@Value("${application.title}") String title, @Value("${application.icon}") String icon, @Value("${viro.brush.width.default}") Integer width, Settings settings, JationObserver observer) {
         super(icon, title, new Position(0, 0), new Position(
                 Screen.getPrimary().getBounds().getMaxX(),
-                Screen.getPrimary().getBounds().getMaxY() + 20
+                Screen.getPrimary().getBounds().getMaxY()
         ));
 
         this.previewCanvas = this.createCanvasOnTop();
@@ -62,10 +62,10 @@ public class Window extends CanvasWrapper {
             System.exit(0);
         });
 
-        new IconButton(this, this.observer)
-                .setY(40)
+        new IconButton(this, this.observer, settings)
                 .setX((int) Screen.getPrimary().getBounds().getMaxX() - 40)
-                .setIcon("/assets/brushes/circle.png")
+                .setY((int) Screen.getPrimary().getBounds().getMaxY() - 70)
+                .setIcon("/assets/controls/settings.png")
                 .onClick(() -> {
                     System.out.println("Hello World");
                 }).draw();

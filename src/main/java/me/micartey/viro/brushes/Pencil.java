@@ -34,11 +34,6 @@ public class Pencil extends Brush {
     }
 
     @Observe
-    public void onPress(MousePressEvent event) {
-        this.positions.clear();
-    }
-
-    @Observe
     public void onDrag(MouseDragEvent event, Window window) {
         GraphicsWrapper wrapper = window.getPreviewGraphics();
 
@@ -60,5 +55,7 @@ public class Pencil extends Brush {
                 radialMenu.getColor(),
                 window.getPreviewGraphics().getLineWidth()
         ));
+
+        this.positions.clear();
     }
 }
