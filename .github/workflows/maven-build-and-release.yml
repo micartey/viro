@@ -51,7 +51,7 @@ jobs:
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os-name }}-viro
+          name: ${{ matrix.os-name }}-viro.jar
           path: ./target/${{ matrix.os-name }}-viro.jar
 
   release:
@@ -73,8 +73,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: nightly
-          release_name: Release ${{ env.SHORT_SHA }}
+          tag_name: nightly-${{ env.SHORT_SHA }}
+          release_name: nightly-${{ env.SHORT_SHA }}
           draft: false
           prerelease: true
   
