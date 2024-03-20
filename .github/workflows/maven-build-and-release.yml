@@ -85,7 +85,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./target/linux/linux-viro.jar
-          asset_name: viro-linux-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
+          asset_name: viro-linux-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
       - name: Upload Windows JAR to Release
@@ -95,6 +95,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./target/windows/windows-viro.jar
-          asset_name: viro-windows-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
+          asset_name: viro-windows-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
