@@ -82,7 +82,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/linux-${{ steps.find-jar.outputs.jar_name }}
+          asset_path: ./target/
           asset_name: viro-linux-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
@@ -92,7 +92,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/windows-${{ steps.find-jar.outputs.jar_name }}
+          asset_path: ./target/
           asset_name: viro-windows-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
