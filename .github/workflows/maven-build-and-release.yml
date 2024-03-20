@@ -45,13 +45,13 @@ jobs:
 
       - name: Rename JAR file
         run: |
-          mv ./target/${{ steps.find-jar.outputs.jar_name }} ./target/${{ matrix.os-name }}-${{ steps.find-jar.outputs.jar_name }}
+          mv ./target/${{ steps.find-jar.outputs.jar_name }} ./target/${{ matrix.os-name }}-viro.jar
         shell: bash
 
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os-name }}-jar
+          name: ${{ matrix.os-name }}-viro
           path: ./target/${{ matrix.os-name }}-viro.jar
 
   release:
@@ -60,6 +60,8 @@ jobs:
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v2
+        with:
+          path: target/
   
       - name: Get short SHA
         id: short-sha
