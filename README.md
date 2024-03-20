@@ -42,6 +42,7 @@ The code can be found [here](https://github.com/micartey/viro/blob/1a8fa0810a2b0
 
 <div align="center">
   <i>(Yes this image has been drawn with viro - I just suck at drawing with a mouse)</i>
+  <br />
 </div>
 
 The graphic above shows how the mouse (some mouse event) is adding sth to the event bus which gets picked up by the Brush.
@@ -49,20 +50,23 @@ If the mouse event is e.g. a release event, the Bursh will push the created shap
 I firmly believe that event-based architectures are superior and easier to maintain.
 After 3. years I continued development and getting back into the project was easy due to the architecture my younger me (thankfully) created.
 
-## Getting Started
+### Development
 
-<details>
-<summary>Setup viro for development</summary>
+*(Writing this for future me in order to not spend an entire evening to get this up and running)*
 
 1. Create a `.sdk` folder
 2. Download a [javafx-sdk](https://gluonhq.com/products/javafx/) and extract it into the `.sdk` folder.
    The resulting structure should be: `.sdk/<your-fx-sdk>/lib`
-3. Edit the Run configuration in your idea and add the following JVM flag
+3. Edit the Run configuration in your ide and add the following JVM flag
 ```
 --module-path ./.sdk/<your-fx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics
 ```
+4. Build the application with Maven. Make sure to skip tests
+```shell
+mvn package -B -DskipTests=true -f pom.xml
+```
 
-</details>
+## Getting Started
 
 Go to the [releases](https://github.com/micartey/viro/releases) and download the newest version of viro. 
 This can either be a commit or the latest stable version.
