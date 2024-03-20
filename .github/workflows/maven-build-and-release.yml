@@ -2,8 +2,8 @@ name: Build and Release JAR
 
 on:
   push:
-    branches:
-      - master
+    # branches:
+    #   - master
 
 jobs:
   build:
@@ -67,6 +67,10 @@ jobs:
         id: short-sha
         run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
   
+      - name: List files
+        id: list_files
+        run: ls -lsr target
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
