@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.os-name }}-jar
-          path: ./target/${{ matrix.os-name }}-${{ steps.find-jar.outputs.jar_name }}
+          path: ./target/${{ matrix.os-name }}-viro.jar
 
   release:
     needs: build
@@ -71,7 +71,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.SHORT_SHA }}
+          tag_name: nightly
           release_name: Release ${{ env.SHORT_SHA }}
           draft: false
           prerelease: true
@@ -82,7 +82,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/
+          asset_path: ./target/linux-viro.jar
           asset_name: viro-linux-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
@@ -92,7 +92,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/
+          asset_path: ./target/windows-viro.jar
           asset_name: viro-windows-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
