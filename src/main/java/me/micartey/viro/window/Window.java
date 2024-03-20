@@ -15,6 +15,7 @@ import me.micartey.viro.events.viro.*;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
+import me.micartey.viro.window.components.IconButton;
 import me.micartey.viro.window.wrapper.CanvasWrapper;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +46,7 @@ public class Window extends CanvasWrapper {
                 Screen.getPrimary().getBounds().getMaxY() + 20
         ));
 
-        this.previewCanvas = this.createChildCanvas();
+        this.previewCanvas = this.createCanvasOnTop();
         this.previewGraphics = new GraphicsWrapper(
                 this.previewCanvas.getGraphicsContext2D()
         );
@@ -60,6 +61,14 @@ public class Window extends CanvasWrapper {
         this.stage.setOnCloseRequest((event) -> {
             System.exit(0);
         });
+
+        new IconButton(this, this.observer)
+                .setY(40)
+                .setX((int) Screen.getPrimary().getBounds().getMaxX() - 40)
+                .setIcon("/assets/brushes/circle.png")
+                .onClick(() -> {
+                    System.out.println("Hello World");
+                }).draw();
 
         this.observer.subscribe(this);
     }
@@ -108,7 +117,7 @@ public class Window extends CanvasWrapper {
     public void onBrushSelect(BrushSelectEvent event) {
         this.previewGraphics.reset();
 
-        if(event.getCurrent().getClass().equals(Eraser.class)) {
+        if (event.getCurrent().getClass().equals(Eraser.class)) {
             this.scene.setCursor(Cursor.DEFAULT);
             return;
         }
@@ -153,11 +162,10 @@ public class Window extends CanvasWrapper {
      */
     @Observe
     public void onClick(MousePressEvent event, RadialMenu radialMenu) {
-        if(radialMenu.stage.isShowing())
-//            PlatformImpl.runLater(radialMenu.stage::hide);
+        if (radialMenu.stage.isShowing())
             radialMenu.stage.hide();
 
-        if(!event.getMouseButton().equals(MouseButton.SECONDARY))
+        if (!event.getMouseButton().equals(MouseButton.SECONDARY))
             return;
 
         this.previewGraphics.reset();
@@ -167,7 +175,6 @@ public class Window extends CanvasWrapper {
                 event.getPosition().getY() - radialMenu.getHeight() / 2
         ));
 
-//        PlatformImpl.runLater(radialMenu.stage::show);
         radialMenu.stage.show();
     }
 
@@ -177,7 +184,7 @@ public class Window extends CanvasWrapper {
      */
     @EventListener(ShapeUndoEvent.class)
     public void undo() {
-        if(this.visible.isEmpty())
+        if (this.visible.isEmpty())
             return;
 
         this.invisible.push(this.visible.pop());
@@ -190,7 +197,7 @@ public class Window extends CanvasWrapper {
      */
     @EventListener(ShapeRedoEvent.class)
     public void redo() {
-        if(this.invisible.isEmpty())
+        if (this.invisible.isEmpty())
             return;
 
         this.visible.push(this.invisible.pop());

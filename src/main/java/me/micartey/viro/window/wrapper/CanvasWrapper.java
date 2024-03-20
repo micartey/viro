@@ -115,7 +115,7 @@ public abstract class CanvasWrapper extends Canvas {
         this.box.setStyle("-fx-background-color: #" + color.toString().substring(2) + ";");
     }
 
-    public Canvas createChildCanvas() {
+    public Canvas createCanvasOnTop() {
         Canvas canvas = new Canvas(
                 this.getWidth(),
                 this.getHeight()

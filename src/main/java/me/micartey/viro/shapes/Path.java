@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -11,19 +12,26 @@ import java.util.Set;
 public class Path extends Shape {
 
     private final Map<Position, Integer> positions;
+    private final double[]               dashes;
 
-    public Path(Map<Position, Integer> positions, Color color, int width) {
+    public Path(Map<Position, Integer> positions, Color color, int width, double... dashes) {
         super(color, width);
 
         this.positions = new LinkedHashMap<>(positions);
+        this.dashes = Arrays.stream(dashes).toArray();
+    }
+
+    public Path(Map<Position, Integer> positions, Color color, int width) {
+        this(positions, color, width, new double[0]);
     }
 
     @Override
     public void paint(GraphicsWrapper context) {
-        for(int index = 0; index < positions.size() - 1; index++) {
+        for (int index = 0; index < positions.size() - 1; index++) {
             Position current = this.getByIndex(index);
             Position next = this.getByIndex(index + 1);
 
+            context.setLineDashes(this.dashes);
             context.setLineWidth(this.positions.get(current));
             context.drawLine(
                     current.getX(),
@@ -33,7 +41,7 @@ public class Path extends Shape {
             );
         }
     }
-    
+
     private Position getByIndex(int index) {
         return positions.keySet().toArray(new Position[0])[index];
     }
@@ -55,18 +63,6 @@ public class Path extends Shape {
 
     @Override
     public boolean select(Position position) {
-//        return IntStream.range(0, this.positions.size() - 1).anyMatch(index -> {
-//            Position destination = this.getByIndex(index + 1);
-//            Position origin = this.getByIndex(index);
-//
-//            double distanceDestination = destination.distance(position);
-//            double distanceOrigin = origin.distance(position);
-//
-//            double distance = origin.distance(destination);
-//
-//            return Math.abs(distance - (distanceOrigin + distanceDestination)) < .3;
-//        });
-
         return positions.keySet().stream().mapToDouble(it -> it.distance(position))
                 .min().orElse(Integer.MAX_VALUE) < 4;
     }

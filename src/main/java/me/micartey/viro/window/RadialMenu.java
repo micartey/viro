@@ -47,8 +47,8 @@ public class RadialMenu extends CanvasWrapper {
             this.brush = brush;
         });
 
-        this.selected = this.createChildCanvas();
-        this.overlay = this.createChildCanvas();
+        this.selected = this.createCanvasOnTop();
+        this.overlay = this.createCanvasOnTop();
 
         this.positions = new HashMap<>();
         this.radius = radius;

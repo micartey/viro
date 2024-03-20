@@ -43,6 +43,7 @@ The code can be found [here](https://github.com/micartey/viro/blob/1a8fa0810a2b0
 <div align="center">
   <i>(Yes this image has been drawn with viro - I just suck at drawing with a mouse)</i>
   <br />
+  <br />
 </div>
 
 The graphic above shows how the mouse (some mouse event) is adding sth to the event bus which gets picked up by the Brush.
