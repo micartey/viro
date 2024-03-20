@@ -28,7 +28,26 @@
 viro is a java overlay doodle application meant to quickly draw and highlight things in screen sharings or recordings.
 It is implemented in JavaFx and builds on the Spring Boot framework.
 
-![](images/preivew.png)
+![](images/preview.png)
+
+### Architecture
+
+Due to scalability and ease of development, an event-based architecture is being used.
+Most parts are covered by the build-in event system of Spring Boot, some other parts are covered by [jairo](https://github.com/micartey/jairo).
+jairo is being used to only execute events for the current selected brush.
+It provides a possibility to add a filter before invoking a method, which checks if the brush is the selected brush.
+The code can be found [here](https://github.com/micartey/viro/blob/1a8fa0810a2b03d8fedd1727def66c3e9a417cc9/src/main/java/me/micartey/viro/input/MouseObserver.java#L49-L62).
+
+![](images/event_bus.png)
+
+<div align="center">
+  <i>(Yes this image has been drawn with viro - I just suck at drawing with a mouse)</i>
+</div>
+
+The graphic above shows how the mouse (some mouse event) is adding sth to the event bus which gets picked up by the Brush.
+If the mouse event is e.g. a release event, the Bursh will push the created shape to the event bus which will then gets picked up by the Canvis and get rendered.
+I firmly believe that event-based architectures are superior and easier to maintain.
+After 3. years I continued development and getting back into the project was easy due to the architecture my younger me (thankfully) created.
 
 ## Getting Started
 
@@ -50,4 +69,3 @@ This can either be a commit or the latest stable version.
 As both should work you can choose for yourself.
 
 You also need to have a Java version newer or equal to Java 17.
-As you also need the binaries for fx, you should consider the zulu distribution if you current jdk isn't able to run the jar file.
