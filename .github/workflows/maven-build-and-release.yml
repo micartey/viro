@@ -2,8 +2,6 @@ name: Build and Release JAR
 
 on:
   push:
-    branches:
-      - master
 
 jobs:
   build:
@@ -51,12 +49,13 @@ jobs:
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os-name }}-viro.jar
+          name: ${{ matrix.os-name }}
           path: ./target/${{ matrix.os-name }}-viro.jar
 
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v2
@@ -66,7 +65,7 @@ jobs:
       - name: Get short SHA
         id: short-sha
         run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
-  
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -84,8 +83,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/linux-viro.jar
-          asset_name: viro-linux-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
+          asset_path: ./target/linux/linux-viro.jar
+          asset_name: viro-linux-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
       - name: Upload Windows JAR to Release
@@ -94,7 +93,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/windows-viro.jar
-          asset_name: viro-windows-${{ steps.short-sha.outputs.SHORT_SHA }}.jar
+          asset_path: ./target/windows/windows-viro.jar
+          asset_name: viro-windows-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
   
