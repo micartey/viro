@@ -106,12 +106,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.dlsc.preferencesfx</groupId>
-            <artifactId>preferencesfx-core</artifactId>
-            <version>11.8.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>

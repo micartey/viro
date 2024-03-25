@@ -1,6 +1,7 @@
 package me.micartey.viro.window;
 
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
@@ -56,18 +57,15 @@ public class Window extends CanvasWrapper {
 
         this.previewGraphics.setLineWidth(width);
 
-        // TODO: Add configuration for this
-//        this.stage.setAlwaysOnTop(true);
-        this.stage.setOnCloseRequest((event) -> {
-            System.exit(0);
-        });
+        this.stage.setAlwaysOnTop(true);
+        this.stage.setOnCloseRequest(Event::consume);
 
         new IconButton(this, this.observer, settings)
                 .setX((int) Screen.getPrimary().getBounds().getMaxX() - 40)
                 .setY((int) Screen.getPrimary().getBounds().getMaxY() - 70)
-                .setIcon("/assets/controls/settings.png")
+                .setIcon("/assets/controls/quit.png")
                 .onClick(() -> {
-                    System.out.println("Hello World");
+                    System.exit(0);
                 }).draw();
 
         this.observer.subscribe(this);
