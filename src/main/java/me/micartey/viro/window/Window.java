@@ -1,6 +1,7 @@
 package me.micartey.viro.window;
 
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
@@ -15,6 +16,7 @@ import me.micartey.viro.events.viro.*;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
+import me.micartey.viro.window.components.IconButton;
 import me.micartey.viro.window.wrapper.CanvasWrapper;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,10 +44,10 @@ public class Window extends CanvasWrapper {
     public Window(@Value("${application.title}") String title, @Value("${application.icon}") String icon, @Value("${viro.brush.width.default}") Integer width, Settings settings, JationObserver observer) {
         super(icon, title, new Position(0, 0), new Position(
                 Screen.getPrimary().getBounds().getMaxX(),
-                Screen.getPrimary().getBounds().getMaxY() + 20
+                Screen.getPrimary().getBounds().getMaxY()
         ));
 
-        this.previewCanvas = this.createChildCanvas();
+        this.previewCanvas = this.createCanvasOnTop();
         this.previewGraphics = new GraphicsWrapper(
                 this.previewCanvas.getGraphicsContext2D()
         );
@@ -55,11 +57,16 @@ public class Window extends CanvasWrapper {
 
         this.previewGraphics.setLineWidth(width);
 
-        // TODO: Add configuration for this
 //        this.stage.setAlwaysOnTop(true);
-        this.stage.setOnCloseRequest((event) -> {
-            System.exit(0);
-        });
+        this.stage.setOnCloseRequest(Event::consume);
+
+        new IconButton(this, this.observer, settings)
+                .setX((int) Screen.getPrimary().getBounds().getMaxX() - 40)
+                .setY((int) Screen.getPrimary().getBounds().getMaxY() - 70)
+                .setIcon("/assets/controls/quit.png")
+                .onClick(() -> {
+                    System.exit(0);
+                }).draw();
 
         this.observer.subscribe(this);
     }
@@ -108,7 +115,7 @@ public class Window extends CanvasWrapper {
     public void onBrushSelect(BrushSelectEvent event) {
         this.previewGraphics.reset();
 
-        if(event.getCurrent().getClass().equals(Eraser.class)) {
+        if (event.getCurrent().getClass().equals(Eraser.class)) {
             this.scene.setCursor(Cursor.DEFAULT);
             return;
         }
@@ -153,11 +160,10 @@ public class Window extends CanvasWrapper {
      */
     @Observe
     public void onClick(MousePressEvent event, RadialMenu radialMenu) {
-        if(radialMenu.stage.isShowing())
-//            PlatformImpl.runLater(radialMenu.stage::hide);
+        if (radialMenu.stage.isShowing())
             radialMenu.stage.hide();
 
-        if(!event.getMouseButton().equals(MouseButton.SECONDARY))
+        if (!event.getMouseButton().equals(MouseButton.SECONDARY))
             return;
 
         this.previewGraphics.reset();
@@ -167,7 +173,6 @@ public class Window extends CanvasWrapper {
                 event.getPosition().getY() - radialMenu.getHeight() / 2
         ));
 
-//        PlatformImpl.runLater(radialMenu.stage::show);
         radialMenu.stage.show();
     }
 
@@ -177,7 +182,7 @@ public class Window extends CanvasWrapper {
      */
     @EventListener(ShapeUndoEvent.class)
     public void undo() {
-        if(this.visible.isEmpty())
+        if (this.visible.isEmpty())
             return;
 
         this.invisible.push(this.visible.pop());
@@ -190,7 +195,7 @@ public class Window extends CanvasWrapper {
      */
     @EventListener(ShapeRedoEvent.class)
     public void redo() {
-        if(this.invisible.isEmpty())
+        if (this.invisible.isEmpty())
             return;
 
         this.visible.push(this.invisible.pop());
