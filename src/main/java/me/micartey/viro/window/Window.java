@@ -57,7 +57,7 @@ public class Window extends CanvasWrapper {
 
         this.previewGraphics.setLineWidth(width);
 
-        this.stage.setAlwaysOnTop(true);
+//        this.stage.setAlwaysOnTop(true);
         this.stage.setOnCloseRequest(Event::consume);
 
         new IconButton(this, this.observer, settings)
