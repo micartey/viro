@@ -70,7 +70,10 @@ You also need to have a Java version newer or equal to Java 17.
 ### Shortcuts
 
 There are some shortcuts you can use.
-They are currently not configurable, but will be in the feature
+They are currently not configurable, but will be in the feature.
+At the moment, the following shortcuts are pre-defined and static:
+
+<br />
 
 <div align="center">
 
