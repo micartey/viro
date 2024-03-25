@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import me.micartey.viro.events.mouse.MouseScrollEvent;
 import me.micartey.viro.events.spring.SpringTickEvent;
 import me.micartey.viro.settings.Settings;
+import me.micartey.viro.window.components.IconButton;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
@@ -92,6 +93,10 @@ public class StrokeWidthPopup {
         this.graphics.setLineWidth(width);
     }
 
+    /**
+     * Make stroke width popup visible if size changes.
+     * Also destroy icon buttons with {@link IconButton#remove()}
+     */
     @EventListener(MouseScrollEvent.class)
     public void onChange() {
         this.time = System.currentTimeMillis();
@@ -101,14 +106,24 @@ public class StrokeWidthPopup {
                 this.window.getWidth() - this.canvas.getWidth()
         );
 
+        this.window.getButtons().forEach(IconButton::remove);
         this.draw();
     }
 
+    /**
+     * Animate the popup to fade away to the right corner.
+     * Afterward, redraw icon buttons with {@link IconButton#draw()}
+     */
     @EventListener(SpringTickEvent.class)
     public void onUpdate() {
         int steps = (int) (.7 * Math.max(1, System.currentTimeMillis() - this.time - this.stay));
 
         this.canvas.setLayoutX(this.window.getWidth() - this.canvas.getWidth() + steps);
         this.canvas.setWidth(240 - steps);
+
+        if (steps < 300)
+            return;
+
+        this.window.getButtons().stream().filter(button -> !button.isVisible()).forEach(IconButton::draw);
     }
 }

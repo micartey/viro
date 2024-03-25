@@ -6,6 +6,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import me.micartey.jation.JationObserver;
@@ -32,6 +33,8 @@ public class IconButton {
     private String icon;
     private Color  color;
 
+    @Getter private boolean visible;
+
     private int size = 30;
     private int x, y;
 
@@ -51,13 +54,21 @@ public class IconButton {
         jationObserver.subscribe(this);
     }
 
-    public void draw() {
+    public void remove() {
         this.graphicsContext.clearRect(
                 this.x - this.size - 100,
                 this.y - this.size - 100,
                 this.x + this.size + 100,
                 this.y + this.size + 100
         );
+
+        this.visible = false;
+    }
+
+    public void draw() {
+        this.remove();
+
+        this.visible = true;
 
         int halfSize = this.size / 2;
 
@@ -91,6 +102,9 @@ public class IconButton {
 
     @Observe
     public void onMove(MouseMoveEvent event) {
+        if (!this.isVisible())
+            return;
+
         /*
          * Remove effect and redraw
          */

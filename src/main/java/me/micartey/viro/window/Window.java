@@ -24,6 +24,8 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 @Component
@@ -38,6 +40,8 @@ public class Window extends CanvasWrapper {
     @Getter private final Stack<Shape> visible   = new Stack<>();
     @Getter private final Stack<Shape> invisible = new Stack<>();
 
+    @Getter private final List<IconButton> buttons;
+
     @Value("${viro.brush.width.max}")
     private Integer maxWidth;
 
@@ -46,6 +50,8 @@ public class Window extends CanvasWrapper {
                 Screen.getPrimary().getBounds().getMaxX(),
                 Screen.getPrimary().getBounds().getMaxY()
         ));
+
+        this.buttons = new ArrayList<>();
 
         this.previewCanvas = this.createCanvasOnTop();
         this.previewGraphics = new GraphicsWrapper(
@@ -60,13 +66,17 @@ public class Window extends CanvasWrapper {
 //        this.stage.setAlwaysOnTop(true);
         this.stage.setOnCloseRequest(Event::consume);
 
-        new IconButton(this, this.observer, settings)
-                .setX((int) Screen.getPrimary().getBounds().getMaxX() - 40)
-                .setY((int) Screen.getPrimary().getBounds().getMaxY() - 70)
-                .setIcon("/assets/controls/quit.png")
-                .onClick(() -> {
-                    System.exit(0);
-                }).draw();
+        this.buttons.add(
+                new IconButton(this, this.observer, settings)
+                        .setX((int) Screen.getPrimary().getBounds().getMaxX() - 40)
+                        .setY((int) Screen.getPrimary().getBounds().getMaxY() - 70)
+                        .setIcon("/assets/controls/quit.png")
+                        .onClick(() -> {
+                            System.exit(0);
+                        })
+        );
+
+        this.buttons.forEach(IconButton::draw);
 
         this.observer.subscribe(this);
     }
