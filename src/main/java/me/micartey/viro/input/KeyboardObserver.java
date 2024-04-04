@@ -84,7 +84,7 @@ public class KeyboardObserver {
             return;
 
         this.graphicsImport.stage.show();
-        this.graphicsImport.resize();
+        this.graphicsImport.setup();
     }
 
 //    @SuppressWarnings("all")
