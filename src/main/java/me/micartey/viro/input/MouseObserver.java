@@ -1,5 +1,6 @@
 package me.micartey.viro.input;
 
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import me.micartey.jation.JationObserver;
@@ -56,6 +57,20 @@ public class MouseObserver {
         this.observer.forEach(clazz, (event, method, instance) -> {
             if (!(instance instanceof Brush))
                 return true;
+
+            /*
+             * FIXES: https://github.com/micartey/viro/issues/11
+             *
+             * When the SECONDAY mouse button is pressed, the radial menu will apear,
+             * which will result in the release event not being processed.
+             *
+             * This does break some brushes e.g. the "Move" brush
+             * Therefore, we will ignore right click for brushes
+             */
+            if (event instanceof MousePressEvent mousePressEvent) {
+                if (mousePressEvent.getMouseButton() == MouseButton.SECONDARY)
+                    return false;
+            }
 
             return this.radialMenu.getBrush() == instance && !this.radialMenu.stage.isShowing();
         });

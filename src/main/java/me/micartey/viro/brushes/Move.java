@@ -1,5 +1,6 @@
 package me.micartey.viro.brushes;
 
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import me.micartey.jation.JationObserver;
@@ -47,7 +48,7 @@ public class Move extends Brush {
         this.shapes.clear();
         this.selection.getShapes().clear();
 
-        collected.stream().distinct().forEach(this.shapes::add);
+        this.shapes.addAll(collected);
     }
 
     @Observe
@@ -68,13 +69,6 @@ public class Move extends Brush {
     @Observe
     public void onRelease(MouseReleaseEvent event, Window window) {
         window.getVisible().addAll(this.shapes);
-
-        this.shapes.forEach(shape -> {
-            shape.draw(new GraphicsWrapper(
-                    window.getGraphicsContext2D()
-            ));
-        });
-
-        window.getPreviewGraphics().reset();
+        window.repaint();
     }
 }
