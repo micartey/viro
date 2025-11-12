@@ -53,7 +53,31 @@ found [here](https://github.com/micartey/viro/blob/1a8fa0810a2b03d8fedd1727def66
 --module-path ./.sdk/<your-fx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics
 ```
 
-4. Build the application with Maven. Make sure to skip tests
+#### Working with Nix 
+
+Things are a lot different on Nix.
+The above stated way does not work because the fx-sdk does not come with the required binaries (at least for wayland).
+Therefore, for development I would recommend using a jdk version with built-in JavaFX.
+
+```nix
+programs.java = {
+    enable = true;
+    package = (pkgs.jdk17.override { enableJavaFX = true; });
+};
+
+wayland.windowManager.hyprland.settings.windowrulev2 = [
+    # Viro
+    "float,class:(.*)viro(.*)$"
+    "bordersize 0, class:(.*)viro(.*)$"
+    "noblur, title:^(Radial-Menu)$"
+    "noshadow, title:^(Radial-Menu)$"
+];
+```
+
+### Build
+
+Build the application with Maven. 
+Make sure to skip tests:
 
 ```shell
 mvn package -B -DskipTests=true -f pom.xml
@@ -66,6 +90,8 @@ This can either be a commit or the latest stable version.
 As both should work you can choose for yourself.
 
 You also need to have a Java version newer or equal to Java 17.
+For some systems, you should also use a java runtime pre-bundled with JavaFX.
+Although viro also bundles java-fx, it is not necessarily sufficent for all Linux distros.
 
 ### Shortcuts
 
@@ -75,12 +101,9 @@ At the moment, the following shortcuts are pre-defined and static:
 
 <br />
 
-<div align="center">
-
-| Shortcut         | Name         | Description                       |
-|------------------|--------------|-----------------------------------|
-| CTRL + Z         | Undo         | Remove shape                      |
-| CTRL + Y         | Redo         | Recreate removed shape            |
-| CTRL + SHIFT + I | Import Image | Import a png / jpg into the scene | 
-
-</div>
+| Shortcut            | Name         | Description                                  |
+|---------------------|--------------|----------------------------------------------|
+| CTRL + Z            | Undo         | Remove shape                                 |
+| CTRL + Y            | Redo         | Recreate removed shape                       |
+| CTRL + SHIFT + I    | Import Image | Import a png / jpg into the scene            | 
+| CTRL + SHIFT + ENTF | Clear        | Remove all shapes and reset background color | 

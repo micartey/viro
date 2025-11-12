@@ -52,7 +52,7 @@ public class MouseObserver {
      *
      * @param clazz of JationEvent
      */
-    private void registerFilter(Class<? extends JationEvent<?>> clazz) {
+    private <T extends JationEvent<T>> void registerFilter(Class<T> clazz) {
         this.observer.forEach(clazz, (event, method, instance) -> {
             if (!(instance instanceof Brush))
                 return true;

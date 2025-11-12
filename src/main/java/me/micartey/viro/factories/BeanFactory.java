@@ -12,7 +12,7 @@ public class BeanFactory {
 
     @Bean
     public JationObserver getJationObserver(ApplicationContext context) {
-        return new JationObserver("me.micartey.viro") {
+        return new JationObserver() {
             @Override
             public <T extends JationEvent<T>> void publish(@NonNull JationEvent<T> event, Object... additional) {
                 super.publish(event, additional);

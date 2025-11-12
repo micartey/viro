@@ -36,6 +36,17 @@ public class Filler extends Brush {
 
     @Observe
     public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Window window) {
+        /*
+         * Special case: Everyting is empty.
+         *
+         * User is attempting to color the entire canvas
+         */
+        if (window.getVisible().isEmpty()) {
+            window.setBackground(radialMenu.getColor());
+            return;
+        }
+
+        // TODO: Refactor
         EXECUTOR_SERVICE.submit(() -> {
             List<Position> positions = this.computeEdges(event.getPosition(), window);
 

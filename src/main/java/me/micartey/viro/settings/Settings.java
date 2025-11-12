@@ -31,7 +31,7 @@ public class Settings {
     ));
 
     @Getter private final Set<KeyCode> clearSelection = new HashSet<>(Arrays.asList(
-            KeyCode.DELETE
+            KeyCode.CONTROL, KeyCode.SHIFT, KeyCode.DELETE
     ));
 
     @Getter private final ObjectProperty<Color> editorColor = new SimpleObjectProperty<>(Color.rgb(21, 21, 21));

@@ -1,6 +1,7 @@
 package me.micartey.viro.input;
 
 import javafx.scene.input.KeyCode;
+import lombok.RequiredArgsConstructor;
 import me.micartey.jation.JationObserver;
 import me.micartey.viro.events.viro.KeyPressEvent;
 import me.micartey.viro.settings.Settings;
@@ -19,28 +20,16 @@ import java.util.List;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 public class KeyboardObserver {
 
-    private final JationObserver observer;
+    private final ApplicationContext context;
+
     private final GraphicsImport graphicsImport;
-    private final RadialMenu     radialMenu;
     private final Settings       settings;
     private final Window         window;
 
-    private final List<KeyCode> pressedKeys;
-
-    @Autowired
-    private ApplicationContext context;
-
-    public KeyboardObserver(Window window, Settings settings, RadialMenu radialMenu, GraphicsImport graphicsImport, JationObserver observer) {
-        this.graphicsImport = graphicsImport;
-        this.radialMenu = radialMenu;
-        this.observer = observer;
-        this.settings = settings;
-        this.window = window;
-
-        this.pressedKeys = new ArrayList<>();
-    }
+    private final List<KeyCode> pressedKeys = new ArrayList<>();
 
     @EventListener({ApplicationStartedEvent.class})
     public void subscribeToKeyboardEvents() {
@@ -76,6 +65,28 @@ public class KeyboardObserver {
         this.window.redo();
     }
 
+    /**
+     * Clear Operation:
+     * <ul>
+     *     <li>Remove all shapes</li>
+     *     <li>Reset background color</li>
+     * </ul>
+     *
+     * @param event key event
+     */
+    @EventListener({KeyPressEvent.class})
+    public void onClear(KeyPressEvent event) {
+        Set<KeyCode> clearSet = this.settings.getClearSelection();
+
+        if (!event.getKeyCodes().containsAll(clearSet))
+            return;
+
+        while (!this.window.getVisible().isEmpty())
+            this.window.undo();
+
+        this.window.setBackground(settings.getBackgroundColor());
+    }
+
     @EventListener({KeyPressEvent.class})
     public void onImport(KeyPressEvent event) {
         Set<KeyCode> importSet = this.settings.getGraphicImportSelection();
@@ -86,46 +97,4 @@ public class KeyboardObserver {
         this.graphicsImport.stage.show();
         this.graphicsImport.setup();
     }
-
-//    @SuppressWarnings("all")
-//    @EventListener({ApplicationStartedEvent.class, SettingUpdateEvent.class})
-//    public void updateClearObserver() {
-//        Stream<VirtualKey> clear = this.fromNames(settings.getClearSelection().stream());
-//
-//        this.clearObserver = KeyStateObservable.of(clear.toArray(VirtualKey[]::new));
-//        this.clearObserver.subscribe(this::onClearUpdate);
-//    }
-
-//    private void onRedoUndoUpdate(KeyStateUpdate update) {
-//        if(!update.getKeyState().equals(KeyState.PRESSED))
-//            return;
-//
-//        if(this.fromNames(this.settings.getRedoSelection().stream()).allMatch(this.redoUndoObserver::isPressed)) {
-//            this.window.redo();
-//            return;
-//        }
-//
-//        if(this.fromNames(this.settings.getUndoSelection().stream()).allMatch(this.redoUndoObserver::isPressed))
-//            this.window.undo();
-//    }
-
-//    private void onClearUpdate(KeyStateUpdate update) {
-//        if(!update.getKeyState().equals(KeyState.PRESSED))
-//            return;
-//
-//        if(this.fromNames(this.settings.getClearSelection().stream()).allMatch(this.clearObserver::isPressed)) {
-//            this.window.getVisible().clear();
-//            this.window.getInvisible().clear();
-//            this.window.repaint();
-//        }
-//    }
-
-//    private void onGraphicImport(KeyStateUpdate update) {
-//        if(!update.getKeyState().equals(KeyState.PRESSED)
-//                || !this.window.stage.isShowing())
-//            return;
-//
-//        if(this.fromNames(this.settings.getOpenGraphicImport().stream()).allMatch(this.toggleGraphicImport::isPressed)) {
-//        }
-//    }
 }
