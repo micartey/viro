@@ -44,9 +44,25 @@ found [here](https://github.com/micartey/viro/blob/1a8fa0810a2b03d8fedd1727def66
 
 *(Writing this for future me in order to not spend an entire evening to get this up and running)*
 
+```bash
+nix develop
+```
+
+You can also enable javaFx globally.
+This also provides a runtime that can actually execute the artifact.
+
+```nix
+programs.java = {
+    enable = true;
+    package = (pkgs.jdk17.override { enableJavaFX = true; });
+};
+```
+
+For legacy purposes:
+
 <details>
 
-<summary>Windows / X11 Way</summary>
+<summary>The manual way for the cavemen</summary>
 
 1. Create a `.sdk` folder
 2. Download a [javafx-sdk](https://gluonhq.com/products/javafx/) and extract it into the `.sdk` folder.
@@ -65,19 +81,6 @@ mvn package -B -DskipTests=true -f pom.xml
 
 </details>
 
-```bash
-nix develop
-```
-
-You can also enable javaFx globally.
-This also provides a runtime that can actually execute the artifact.
-
-```nix
-programs.java = {
-    enable = true;
-    package = (pkgs.jdk17.override { enableJavaFX = true; });
-};
-```
 
 ## Getting Started
 
