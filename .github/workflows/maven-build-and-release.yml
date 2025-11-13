@@ -22,8 +22,8 @@ jobs:
       - name: Set up JDK 21 (Zulu)
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
-          distribution: 'zulu'
+          java-version: "21"
+          distribution: "zulu"
 
       - name: Build with Maven
         run: mvn package -B -DskipTests=true -f pom.xml
@@ -47,7 +47,7 @@ jobs:
         shell: bash
 
       - name: Upload JAR Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os-name }}
           path: ./target/${{ matrix.os-name }}-viro.jar
@@ -61,7 +61,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: target/
-  
+
       - name: Get short SHA
         id: short-sha
         run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
@@ -76,7 +76,7 @@ jobs:
           release_name: nightly-${{ env.SHORT_SHA }}
           draft: false
           prerelease: false
-  
+
       - name: Upload Linux JAR to Release
         uses: actions/upload-release-asset@v1
         env:
@@ -86,7 +86,7 @@ jobs:
           asset_path: ./target/linux/linux-viro.jar
           asset_name: viro-linux-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
-  
+
       - name: Upload Windows JAR to Release
         uses: actions/upload-release-asset@v1
         env:
@@ -96,4 +96,3 @@ jobs:
           asset_path: ./target/windows/windows-viro.jar
           asset_name: viro-windows-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
-  
