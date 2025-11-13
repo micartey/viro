@@ -2,6 +2,7 @@
 /target/
 /runtime/
 /.sdk
+/result
 
 *.iml
 *.bat
