@@ -44,6 +44,10 @@ found [here](https://github.com/micartey/viro/blob/1a8fa0810a2b03d8fedd1727def66
 
 *(Writing this for future me in order to not spend an entire evening to get this up and running)*
 
+<details>
+
+<summary>Windows / X11 Way</summary>
+
 1. Create a `.sdk` folder
 2. Download a [javafx-sdk](https://gluonhq.com/products/javafx/) and extract it into the `.sdk` folder.
    The resulting structure should be: `.sdk/<your-fx-sdk>/lib`
@@ -53,21 +57,26 @@ found [here](https://github.com/micartey/viro/blob/1a8fa0810a2b03d8fedd1727def66
 --module-path ./.sdk/<your-fx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics
 ```
 
-or install a sdk with javaFx bundled.
+4. Build the application with Maven. Make sure to skip tests:
+
+```shell
+mvn package -B -DskipTests=true -f pom.xml
+```
+
+</details>
+
+```bash
+nix develop
+```
+
+You can also enable javaFx globally.
+This also provides a runtime that can actually execute the artifact.
 
 ```nix
 programs.java = {
     enable = true;
     package = (pkgs.jdk17.override { enableJavaFX = true; });
 };
-```
-
-### Build
-
-4. Build the application with Maven. Make sure to skip tests:
-
-```shell
-mvn package -B -DskipTests=true -f pom.xml
 ```
 
 ## Getting Started
@@ -79,6 +88,10 @@ As both should work you can choose for yourself.
 You also need to have a Java version newer or equal to Java 17.
 For some systems, you should also use a java runtime pre-bundled with JavaFX.
 Although viro also bundles java-fx, it is not necessarily sufficent for all Linux distros.
+
+```bash
+nix run github:micartey/viro
+```
 
 ### Hyprland
 
@@ -105,5 +118,5 @@ At the moment, the following shortcuts are pre-defined and static:
 |---------------------|--------------|----------------------------------------------|
 | CTRL + Z            | Undo         | Remove shape                                 |
 | CTRL + Y            | Redo         | Recreate removed shape                       |
-| CTRL + SHIFT + I    | Import Image | Import a png / jpg into the scene            | 
-| CTRL + SHIFT + ENTF | Clear        | Remove all shapes and reset background color | 
+| CTRL + SHIFT + I    | Import Image | Import a png / jpg into the scene            |
+| CTRL + SHIFT + ENTF | Clear        | Remove all shapes and reset background color |

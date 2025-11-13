@@ -59,11 +59,13 @@
 
       in
       {
+        # nix build .#viro
         packages = {
           default = mkViro;
           viro = mkViro;
         };
 
+        # nix run .#viro
         apps = rec {
           default = {
             type = "app";
