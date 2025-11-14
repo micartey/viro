@@ -17,8 +17,11 @@
       let
         pkgs = import nixpkgs {
           inherit system;
-          config.allowUnfree = true;
-          config.permittedInsecurePackages = [ "gradle-7.6.6" ];
+
+          config = {
+            allowUnfree = true;
+            permittedInsecurePackages = [ "gradle-7.6.6" ];
+          };
         };
 
         javaFx = pkgs.jdk17.override { enableJavaFX = true; };
