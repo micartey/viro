@@ -78,6 +78,7 @@
           buildInputs = with pkgs; [
             maven
             javaFx
+            lefthook
           ];
 
           JAVA_HOME = "${javaFx}";
