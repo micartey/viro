@@ -1,6 +1,5 @@
 package me.micartey.viro.window;
 
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -14,7 +13,6 @@ import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.mouse.MouseScrollEvent;
 import me.micartey.viro.events.viro.*;
 import me.micartey.viro.settings.Settings;
-import me.micartey.viro.shapes.Graphic;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.components.IconButton;

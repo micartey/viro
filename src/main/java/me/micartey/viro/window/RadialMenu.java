@@ -33,14 +33,15 @@ public class RadialMenu extends CanvasWrapper {
     @Getter private Color color;
     @Getter private Brush brush;
 
-    @Autowired
-    private ApplicationContext context;
+    private final ApplicationContext context;
 
-    public RadialMenu(@Value("${application.icon}") String icon, @Value("${viro.radialMenu.title}") String title, @Value("${viro.radialMenu.image}") String image, @Value("${viro.radialMenu.radius}") Integer radius, List<Brush> brushes) {
+    public RadialMenu(ApplicationContext context, @Value("${application.icon}") String icon, @Value("${viro.radialMenu.title}") String title, @Value("${viro.radialMenu.image}") String image, @Value("${viro.radialMenu.radius}") Integer radius, List<Brush> brushes) {
         super(icon, title, new Position(0, 0), new Position(
                 500,
                 500
         ));
+
+        this.context = context;
 
         this.color = Color.BLACK;
         brushes.stream().findFirst().ifPresent(brush -> {
@@ -189,7 +190,7 @@ public class RadialMenu extends CanvasWrapper {
                 this.getHeight() / 2
         ));
     }
-    
+
     private Brush getClosestBrush(Position position) {
         return this.positions.entrySet().stream()
                 .min(Comparator.comparingDouble(entry -> position.distance(entry.getValue())))

@@ -31,17 +31,16 @@ public class GraphicsImport extends CanvasWrapper {
     private Image  image;
     private double size;
 
-    @Autowired
-    private ApplicationContext context;
+    private final ApplicationContext context;
+    private final GraphicsWrapper    graphics;
 
-
-    private final GraphicsWrapper graphics;
-
-    public GraphicsImport(@Value("${application.icon}") String icon, @Value("${application.title}") String title) {
+    public GraphicsImport(ApplicationContext context, @Value("${application.icon}") String icon, @Value("${application.title}") String title) {
         super(icon, title, new Position(0, 0), new Position(
                 Screen.getPrimary().getBounds().getMaxX(),
                 Screen.getPrimary().getBounds().getMaxY()
         ));
+
+        this.context = context;
 
         this.stage.setAlwaysOnTop(true);
 
