@@ -34,7 +34,10 @@
           src = ./.;
 
           nativeBuildInputs = [ javaFx ];
-          buildInputs = [ javaFx ];
+          buildInputs = [
+            javaFx
+            pkgs.nautilus
+          ];
 
           mvnHash = "sha256-doVILnKgOqpIIxjOutfTcbUOV+YdqwTyzHmTgH9Uu5c=";
           doCheck = false;
