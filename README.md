@@ -58,43 +58,19 @@ programs.java = {
 };
 ```
 
-For legacy purposes:
-
-<details>
-
-<summary>The manual way for the cavemen</summary>
-
-1. Create a `.sdk` folder
-2. Download a [javafx-sdk](https://gluonhq.com/products/javafx/) and extract it into the `.sdk` folder.
-   The resulting structure should be: `.sdk/<your-fx-sdk>/lib`
-3. Edit the Run configuration in your ide and add the following JVM flag
-
-```
---module-path ./.sdk/<your-fx-sdk>/lib --add-modules javafx.controls,javafx.fxml,javafx.graphics
-```
-
-4. Build the application with Maven. Make sure to skip tests:
-
-```shell
-mvn package -B -DskipTests=true -f pom.xml
-```
-
-</details>
-
-
 ## Getting Started
 
 Go to the [releases](https://github.com/micartey/viro/releases) and download the newest version of viro.
-This can either be a commit or the latest stable version.
-As both should work you can choose for yourself.
-
-You also need to have a Java version newer or equal to Java 17.
-For some systems, you should also use a java runtime pre-bundled with JavaFX.
-Although viro also bundles java-fx, it is not necessarily sufficent for all Linux distros.
+Or use nix (recommended):
 
 ```bash
 nix run github:micartey/viro
 ```
+
+### Requirements
+
+- Java 17+
+- Depending on your system: bundled javafx (e.g. on Nix)
 
 ### Hyprland
 
@@ -108,6 +84,29 @@ wayland.windowManager.hyprland.settings.windowrulev2 = [
     "noshadow, title:^(Radial-Menu)$"
 ];
 ```
+
+### MCP
+
+viro also has an `SSE`-MCP-Endpoint for Large-Language-Modules (LLMs) to interface and draw shapes on their own.
+For gemini-cli, you'll need to add the following:
+
+```json
+{
+    "mcpServers": {
+        "viro": {
+            "url": "http://localhost:8099/mcp/sse"
+        }
+    }
+}
+```
+
+*(Please keep in mind that the syntax for this depends on the tool you use)*
+
+#### TODO:
+
+- [ ] Return shape id on `drawShape`
+- [ ] Offer tool to erase based on id
+- [ ] Offer tool to import local images
 
 ### Shortcuts
 
