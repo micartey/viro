@@ -28,7 +28,7 @@ public class BeanFactory {
 
     @Bean
     @Lazy
-    public ToolCallbackProvider shapeTools(ShapeTools shapeTool, WindowTools windowTools) {
+    public ToolCallbackProvider tools(ShapeTools shapeTool, WindowTools windowTools) {
         return MethodToolCallbackProvider.builder()
                 .toolObjects(shapeTool, windowTools)
                 .build();
