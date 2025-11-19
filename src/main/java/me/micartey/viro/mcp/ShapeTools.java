@@ -22,6 +22,14 @@ public class ShapeTools {
     private final ApplicationContext context;
     private final Window             window;
 
+    /**
+     * Draw a shape (list of connected points)
+     *
+     * @param points                   list of points
+     * @param color                    path color
+     * @param connectFirstAndLastPoint connect first and last point
+     * @return shape id
+     */
     @Tool(
             name = "drawShape",
             description = "Draw a shape for the user to see based on polygon points. Get the shape id in return"
@@ -52,6 +60,11 @@ public class ShapeTools {
         return path.hashCode();
     }
 
+    /**
+     * Delete a shape based on its id which is the {@link Object#hashCode()}
+     *
+     * @param shapeId shape id
+     */
     @Tool(
             name = "deleteShapeById",
             description = "Delete a shape by id. An id is returned when calling 'drawShape'"
@@ -65,6 +78,12 @@ public class ShapeTools {
         this.window.repaint();
     }
 
+    /**
+     * Get the current position of a shape by its id
+     *
+     * @param shapeId shape id
+     * @return Set of pathPoint
+     */
     @Tool(
             name = "getShapePositionById",
             description = "Get the shape position by id a shapes position can be transformed"

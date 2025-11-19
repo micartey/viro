@@ -3,6 +3,7 @@ package me.micartey.viro.factories;
 import lombok.NonNull;
 import me.micartey.jation.JationObserver;
 import me.micartey.jation.interfaces.JationEvent;
+import me.micartey.viro.mcp.ImageTools;
 import me.micartey.viro.mcp.ShapeTools;
 import me.micartey.viro.mcp.WindowTools;
 import org.springframework.ai.tool.ToolCallbackProvider;
@@ -27,10 +28,9 @@ public class BeanFactory {
     }
 
     @Bean
-    @Lazy
-    public ToolCallbackProvider tools(ShapeTools shapeTool, WindowTools windowTools) {
+    public ToolCallbackProvider tools(ShapeTools shapeTool, WindowTools windowTools, ImageTools imageTools) {
         return MethodToolCallbackProvider.builder()
-                .toolObjects(shapeTool, windowTools)
+                .toolObjects(shapeTool, windowTools, imageTools)
                 .build();
     }
 }
