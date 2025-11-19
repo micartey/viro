@@ -8,10 +8,9 @@ import me.micartey.viro.settings.Settings;
 import me.micartey.viro.window.components.IconButton;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 @Component
 public class StrokeWidthPopup {
@@ -36,7 +35,7 @@ public class StrokeWidthPopup {
         this.graphics = new GraphicsWrapper(this.canvas.getGraphicsContext2D());
     }
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     private void setup() {
         this.canvas.setLayoutX(
                 this.window.getWidth() - this.canvas.getWidth()

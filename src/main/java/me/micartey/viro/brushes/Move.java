@@ -1,6 +1,5 @@
 package me.micartey.viro.brushes;
 
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 import me.micartey.jation.JationObserver;
@@ -9,9 +8,8 @@ import me.micartey.viro.events.mouse.MouseDragEvent;
 import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.shapes.Shape;
-import me.micartey.viro.window.Window;
 import me.micartey.viro.shapes.utilities.Position;
-import me.micartey.viro.window.wrapper.GraphicsWrapper;
+import me.micartey.viro.window.Window;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,9 +23,6 @@ public class Move extends Brush {
 
     @Getter private final List<Shape> shapes;
 
-    @Autowired
-    private Selection selection;
-
     public Move(@Value("${viro.brush.move.name}") String name, @Value("${viro.brush.move.icon}") String icon, JationObserver observer) {
         super(icon, name, observer);
 
@@ -40,13 +35,13 @@ public class Move extends Brush {
                 .distinct()
                 .collect(Collectors.toList());
 
-        collected.addAll(this.selection.getShapes());
+//        collected.addAll(selection.getShapes()); // TODO:
 
         window.getVisible().removeAll(collected);
         window.repaint();
 
         this.shapes.clear();
-        this.selection.getShapes().clear();
+//        selection.getShapes().clear();
 
         this.shapes.addAll(collected);
     }

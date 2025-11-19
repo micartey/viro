@@ -20,13 +20,17 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-@Component
+/*
+ * TODO: Fix this tool.
+ *  Current appraoch has circular dependencies
+ */
+//@Component
 public class Selection extends Brush {
 
     @Getter private final List<Shape> shapes;
 
-    @Autowired
-    private Move move;
+//    @Autowired
+    public Move move;
 
     public Selection(@Value("${viro.brush.selection.name}") String name, @Value("${viro.brush.selection.icon}") String icon, JationObserver observer) {
         super(icon, name, observer);
@@ -66,7 +70,7 @@ public class Selection extends Brush {
         if (backup.isEmpty())
             return;
 
-        radialMenu.selectBrush(this.move);
+        radialMenu.selectBrush(move);
     }
 
     private boolean inSelection(Shape shape, Position pos1, Position pos2) {

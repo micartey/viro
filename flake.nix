@@ -39,7 +39,8 @@
             pkgs.nautilus
           ];
 
-          mvnHash = "sha256-doVILnKgOqpIIxjOutfTcbUOV+YdqwTyzHmTgH9Uu5c=";
+#          mvnHash = pkgs.lib.fakeHash;
+          mvnHash = "sha256-+ietMHB9mFEBsxz+d/D3YUGWRW7cdmQWdp+Pc4CT/rI=";
           doCheck = false;
 
           mvnFetchExtraArgs = {

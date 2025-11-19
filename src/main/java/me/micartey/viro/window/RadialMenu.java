@@ -12,12 +12,12 @@ import me.micartey.viro.events.viro.ColorSelectEvent;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.CanvasWrapper;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -63,9 +63,11 @@ public class RadialMenu extends CanvasWrapper {
         this.stage.addEventHandler(MouseEvent.MOUSE_MOVED, this::onMouseMove);
         this.stage.addEventHandler(MouseEvent.MOUSE_RELEASED, this::onMousePress);
         this.stage.setAlwaysOnTop(true);
+
+        this.setup();
+        this.selectDefaultBrush();
     }
 
-    @PostConstruct
     private void setup() {
         this.selected.setEffect(new DropShadow(18, Color.color(color.getRed(), color.getGreen(), color.getBlue())));
         this.selected.getGraphicsContext2D().setFill(Color.rgb(44, 44, 44));
@@ -74,7 +76,6 @@ public class RadialMenu extends CanvasWrapper {
         this.getGraphicsContext2D().setFill(Color.rgb(21, 21, 21));
     }
 
-    @PostConstruct
     private void selectDefaultBrush() {
         this.positions.keySet().stream().findFirst().ifPresent(this::selectBrush);
     }

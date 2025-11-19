@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.5</version>
+        <version>3.5.3</version>
         <relativePath/>
     </parent>
 
@@ -47,6 +47,7 @@
                             <version>1.18.42</version>
                         </path>
                     </annotationProcessorPaths>
+                    <parameters>true</parameters>
                     <source>16</source>
                     <target>16</target>
                 </configuration>
@@ -72,23 +73,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+            <version>1.1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-
+        <!-- OTHER -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -96,23 +86,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!--VIRO DEPENDENCIES-->
         <dependency>
             <groupId>me.micartey</groupId>
             <artifactId>jation</artifactId>
             <version>2.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.11</version>
         </dependency>
 
         <dependency>
@@ -133,5 +111,4 @@
             <version>${javafx.version}</version>
         </dependency>
     </dependencies>
-
 </project>
