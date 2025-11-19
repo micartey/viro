@@ -49,7 +49,7 @@ nix develop
 ```
 
 You can also enable javaFx globally.
-This also provides a runtime that can actually execute the artifact.
+This also provides a runtime that can guaranteed execute the artifact.
 
 ```nix
 programs.java = {
@@ -70,20 +70,7 @@ nix run github:micartey/viro
 ### Requirements
 
 - Java 17+
-- Depending on your system: bundled javafx (e.g. on Nix)
-
-### Hyprland
-
-For Hyprland I recommend to set the following window rules for a proper experience.
-
-```nix
-wayland.windowManager.hyprland.settings.windowrulev2 = [
-    "float,class:(.*)viro(.*)$"
-    "bordersize 0, class:(.*)viro(.*)$"
-    "noblur, title:^(Radial-Menu)$"
-    "noshadow, title:^(Radial-Menu)$"
-];
-```
+- Depending on your system: javafx (e.g. on Nix)
 
 ### MCP
 
