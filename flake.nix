@@ -39,7 +39,7 @@
             pkgs.nautilus
           ];
 
-#          mvnHash = pkgs.lib.fakeHash;
+          #          mvnHash = pkgs.lib.fakeHash;
           mvnHash = "sha256-+ietMHB9mFEBsxz+d/D3YUGWRW7cdmQWdp+Pc4CT/rI=";
           doCheck = false;
 
@@ -56,6 +56,17 @@
             mkdir -p $out/bin
             cat > $out/bin/viro <<EOF
             #!/bin/sh
+
+            # Attempt to set Hyprland rules dynamically on launch
+            # This helps users running via 'nix run'
+            if command -v hyprctl > /dev/null; then
+                echo "Patching Hyprland window rules"
+                hyprctl keyword windowrulev2 "float,class:(.*)viro(.*)$" > /dev/null 2>&1
+                hyprctl keyword windowrulev2 "bordersize 0, class:(.*)viro(.*)$" > /dev/null 2>&1
+                hyprctl keyword windowrulev2 "noblur, title:^(Radial-Menu)$" > /dev/null 2>&1
+                hyprctl keyword windowrulev2 "noshadow, title:^(Radial-Menu)$" > /dev/null 2>&1
+            fi
+
             exec ${javaFx}/bin/java -jar $out/share/java/viro.jar
             EOF
             chmod +x $out/bin/viro

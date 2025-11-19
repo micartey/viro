@@ -5,15 +5,14 @@ import me.micartey.viro.events.viro.ShapeSubmitEvent;
 import me.micartey.viro.mcp.objects.Color;
 import me.micartey.viro.mcp.objects.PathPoint;
 import me.micartey.viro.shapes.Path;
+import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.Window;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,6 +63,29 @@ public class ShapeTools {
         });
 
         this.window.repaint();
+    }
+
+    @Tool(
+            name = "getShapePositionById",
+            description = "Get the shape position by id a shapes position can be transformed"
+    )
+    public Set<PathPoint> getPositionById(int shapeId) {
+        Optional<Shape> match = this.window.getVisible().stream().filter(shape -> shape.hashCode() == shapeId)
+                .findFirst();
+
+        if (match.isEmpty()) {
+            return null;
+        }
+
+        if (match.get() instanceof Path path) {
+            int width = path.getWidth();
+
+            return path.getPoints().stream()
+                    .map(point -> new PathPoint(point.getX(), point.getY(), width))
+                    .collect(Collectors.toSet());
+        }
+
+        return null;
     }
 
 }
