@@ -39,8 +39,8 @@
             pkgs.nautilus
           ];
 
-          #          mvnHash = pkgs.lib.fakeHash;
-          mvnHash = "sha256-+ietMHB9mFEBsxz+d/D3YUGWRW7cdmQWdp+Pc4CT/rI=";
+#          mvnHash = pkgs.lib.fakeHash;
+          mvnHash = "sha256-EnAkRk7XMJKdo8d77nD0eqGjy82mCozJFz5e9DuGAzY=";
           doCheck = false;
 
           mvnFetchExtraArgs = {
@@ -67,7 +67,7 @@
                 hyprctl keyword windowrulev2 "noshadow, title:^(Radial-Menu)$" > /dev/null 2>&1
             fi
 
-            exec ${javaFx}/bin/java -jar $out/share/java/viro.jar
+            exec ${javaFx}/bin/java -Xmx5G -jar $out/share/java/viro.jar
             EOF
             chmod +x $out/bin/viro
           '';
