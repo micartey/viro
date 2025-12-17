@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.micartey.viro.events.viro.ShapeSubmitEvent;
 import me.micartey.viro.mcp.objects.Color;
 import me.micartey.viro.mcp.objects.PathPoint;
+import me.micartey.viro.mcp.objects.McpShape;
 import me.micartey.viro.shapes.Path;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
@@ -107,4 +108,16 @@ public class ShapeTools {
         return null;
     }
 
+    /**
+     * Get all shapes that are on the visible plane
+     */
+    @Tool(
+            name = "getShapes",
+            description = "Get all shapes and their path points"
+    )
+    public Set<McpShape> getShapes() {
+        return this.window.getVisible().stream()
+                .map(shape -> new McpShape(shape.getPoints().stream().map(point -> new PathPoint(point.getX(), point.getY(), shape.getWidth())).collect(Collectors.toList())))
+                .collect(Collectors.toSet());
+    }
 }
