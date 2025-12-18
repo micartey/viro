@@ -89,12 +89,6 @@ For gemini-cli, you'll need to add the following:
 
 *(Please keep in mind that the syntax for this depends on the tool you use)*
 
-#### TODO:
-
-- [x] Return shape id on `drawShape`
-- [x] Offer tool to erase based on id
-- [x] Offer tool to import (local) images
-
 ### Shortcuts
 
 There are some shortcuts you can use.
