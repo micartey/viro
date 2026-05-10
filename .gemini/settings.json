@@ -1,7 +1,0 @@
-{
-    "mcpServers": {
-        "viro": {
-            "url": "http://localhost:8099/mcp/sse"
-        }
-    }
-}

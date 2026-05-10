@@ -3,6 +3,8 @@
 /runtime/
 /.sdk
 /result
+/build
+/.gradle
 
 *.iml
 *.bat

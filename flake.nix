@@ -24,50 +24,41 @@
           };
         };
 
-        javaFx = pkgs.jdk17.override { enableJavaFX = true; };
+        javaFxJdk = pkgs.jdk17.override { enableJavaFX = true; };
 
-        # Use buildMavenPackage
-        mkViro = pkgs.maven.buildMavenPackage rec {
+        # Use mkDerivation with Gradle
+        mkViro = pkgs.stdenv.mkDerivation rec {
           pname = "viro";
-          version = "0.1.0";
+          version = "1.0";
 
           src = ./.;
 
-          nativeBuildInputs = [ javaFx ];
-          buildInputs = [
-            javaFx
-            pkgs.nautilus
-          ];
+          nativeBuildInputs = [ javaFxJdk pkgs.gradle_8 ];
+          buildInputs = [ javaFxJdk ];
 
-#          mvnHash = pkgs.lib.fakeHash;
-          mvnHash = "sha256-EnAkRk7XMJKdo8d77nD0eqGjy82mCozJFz5e9DuGAzY=";
-          doCheck = false;
-
-          mvnFetchExtraArgs = {
-            hash = pkgs.lib.fakeHash;
-          };
-
-          JAVA_HOME = "${javaFx}";
+          buildPhase = ''
+            export JAVA_HOME=${javaFxJdk}
+            export GRADLE_HOME=${pkgs.gradle_8}
+            export JAVAFX_JMODS=${javaFxJdk}/lib/openjdk/jmods
+            $GRADLE_HOME/bin/gradle --no-daemon bootJar -x test
+          '';
 
           installPhase = ''
             mkdir -p $out/share/java
-            cp target/*.jar $out/share/java/viro.jar
+            cp build/libs/viro-1.0.jar $out/share/java/viro.jar
 
             mkdir -p $out/bin
             cat > $out/bin/viro <<EOF
             #!/bin/sh
 
-            # Attempt to set Hyprland rules dynamically on launch
-            # This helps users running via 'nix run'
             if command -v hyprctl > /dev/null; then
-                echo "Patching Hyprland window rules"
                 hyprctl keyword windowrulev2 "float,class:(.*)viro(.*)$" > /dev/null 2>&1
                 hyprctl keyword windowrulev2 "bordersize 0, class:(.*)viro(.*)$" > /dev/null 2>&1
                 hyprctl keyword windowrulev2 "noblur, title:^(Radial-Menu)$" > /dev/null 2>&1
                 hyprctl keyword windowrulev2 "noshadow, title:^(Radial-Menu)$" > /dev/null 2>&1
             fi
 
-            exec ${javaFx}/bin/java -Xmx5G -jar $out/share/java/viro.jar
+            exec ${javaFxJdk}/bin/java --module-path ${javaFxJdk}/lib/openjdk/jmods --add-modules javafx.controls,javafx.fxml -Xmx5G -jar $out/share/java/viro.jar
             EOF
             chmod +x $out/bin/viro
           '';
@@ -93,13 +84,10 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            maven
-            javaFx
-            lefthook
-          ];
+          buildInputs = [ javaFxJdk pkgs.lefthook ];
 
-          JAVA_HOME = "${javaFx}";
+          JAVA_HOME = "${javaFxJdk}";
+          JAVAFX_JMODS = "${javaFxJdk}/lib/openjdk/jmods";
         };
       }
     );
