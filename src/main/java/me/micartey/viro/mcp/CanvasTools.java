@@ -3,15 +3,15 @@ package me.micartey.viro.mcp;
 import lombok.RequiredArgsConstructor;
 import me.micartey.viro.mcp.objects.Color;
 import me.micartey.viro.mcp.objects.Resolution;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class WindowTools {
+public class CanvasTools {
 
-    private final Window window;
+    private final Canvas canvas;
 
     @Tool(
             name = "getScreenResolution",
@@ -19,8 +19,8 @@ public class WindowTools {
     )
     public Resolution getScreenResolution() {
         return new Resolution(
-                window.getWidth(),
-                window.getHeight()
+                canvas.getWidth(),
+                canvas.getHeight()
         );
     }
 
@@ -29,6 +29,6 @@ public class WindowTools {
             description = "Set the background color of the default plane for viro"
     )
     public void setBackgroundColor(Color color) {
-        window.setBackground(color.toFxColor());
+        canvas.setBackground(color.toFxColor());
     }
 }

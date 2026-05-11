@@ -1,6 +1,5 @@
 package me.micartey.viro.window;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import me.micartey.viro.events.mouse.MouseScrollEvent;
 import me.micartey.viro.events.spring.SpringTickEvent;
@@ -16,43 +15,43 @@ import org.springframework.stereotype.Component;
 public class StrokeWidthPopup {
 
     private final RadialMenu radialMenu;
-    private final Window     window;
+    private final Canvas     canvas;
 
-    private final GraphicsWrapper graphics;
-    private final Settings        settings;
-    private final Canvas          canvas;
+    private final javafx.scene.canvas.Canvas fxCanvas;
+    private final GraphicsWrapper            graphics;
+    private final Settings                   settings;
 
     private final long stay;
     private       long time;
 
-    public StrokeWidthPopup(@Value("${viro.brushbar.stay}") Integer stay, Window window, RadialMenu radialMenu, Settings settings) {
+    public StrokeWidthPopup(@Value("${viro.brushbar.stay}") Integer stay, Canvas canvas, RadialMenu radialMenu, Settings settings) {
         this.radialMenu = radialMenu;
         this.settings = settings;
-        this.window = window;
+        this.canvas = canvas;
         this.stay = stay;
 
-        this.canvas = new Canvas(240, 60);
-        this.graphics = new GraphicsWrapper(this.canvas.getGraphicsContext2D());
+        this.fxCanvas = new javafx.scene.canvas.Canvas(240, 60);
+        this.graphics = new GraphicsWrapper(this.fxCanvas.getGraphicsContext2D());
     }
 
     @EventListener(ApplicationReadyEvent.class)
     private void setup() {
-        this.canvas.setLayoutX(
-                this.window.getWidth() - this.canvas.getWidth()
+        this.fxCanvas.setLayoutX(
+                this.canvas.getWidth() - this.fxCanvas.getWidth()
         );
 
-        this.canvas.setLayoutY(
-                this.window.getHeight() - this.canvas.getHeight() - 80
+        this.fxCanvas.setLayoutY(
+                this.canvas.getHeight() - this.fxCanvas.getHeight() - 80
         );
 
-        this.window.group.getChildren().add(this.canvas);
+        this.canvas.group.getChildren().add(this.fxCanvas);
     }
 
     private synchronized void draw() {
         this.graphics.reset();
 
         this.graphics.setColor(settings.getEditorColor().get());
-        this.graphics.fillRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
+        this.graphics.fillRect(0, 0, this.fxCanvas.getWidth(), this.fxCanvas.getHeight());
 
         this.graphics.setColor(Color.WHITE);
 
@@ -63,7 +62,7 @@ public class StrokeWidthPopup {
                 50
         );
 
-        int width = this.window.getPreviewGraphics().getLineWidth();
+        int width = this.canvas.getPreviewGraphics().getLineWidth();
 
         this.graphics.setLineWidth(width);
         this.graphics.setColor(this.radialMenu.getColor());
@@ -76,7 +75,7 @@ public class StrokeWidthPopup {
         this.graphics.setColor(Color.WHITESMOKE);
 
         this.graphics.drawString(
-                String.valueOf(this.window.getPreviewGraphics().getLineWidth()),
+                String.valueOf(this.canvas.getPreviewGraphics().getLineWidth()),
                 70,
                 35,
                 16
@@ -100,12 +99,12 @@ public class StrokeWidthPopup {
     public void onChange() {
         this.time = System.currentTimeMillis();
 
-        this.canvas.setWidth(240);
-        this.canvas.setLayoutX(
-                this.window.getWidth() - this.canvas.getWidth()
+        this.fxCanvas.setWidth(240);
+        this.fxCanvas.setLayoutX(
+                this.canvas.getWidth() - this.fxCanvas.getWidth()
         );
 
-        this.window.getButtons().forEach(IconButton::remove);
+        this.canvas.getButtons().forEach(IconButton::remove);
         this.draw();
     }
 
@@ -117,12 +116,12 @@ public class StrokeWidthPopup {
     public void onUpdate() {
         int steps = (int) (.7 * Math.max(1, System.currentTimeMillis() - this.time - this.stay));
 
-        this.canvas.setLayoutX(this.window.getWidth() - this.canvas.getWidth() + steps);
-        this.canvas.setWidth(240 - steps);
+        this.fxCanvas.setLayoutX(this.canvas.getWidth() - this.fxCanvas.getWidth() + steps);
+        this.fxCanvas.setWidth(240 - steps);
 
         if (steps < 300)
             return;
 
-        this.window.getButtons().stream().filter(button -> !button.isVisible()).forEach(IconButton::draw);
+        this.canvas.getButtons().stream().filter(button -> !button.isVisible()).forEach(IconButton::draw);
     }
 }

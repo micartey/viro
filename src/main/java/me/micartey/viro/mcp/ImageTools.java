@@ -5,20 +5,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import lombok.RequiredArgsConstructor;
 import me.micartey.viro.events.viro.ShapeSubmitEvent;
-import me.micartey.viro.mcp.objects.PathPoint;
 import me.micartey.viro.shapes.Graphic;
-import me.micartey.viro.shapes.Path;
-import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
-import me.micartey.viro.window.GraphicsImport;
-import me.micartey.viro.window.Window;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

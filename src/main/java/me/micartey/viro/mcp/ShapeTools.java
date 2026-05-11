@@ -8,7 +8,7 @@ import me.micartey.viro.mcp.objects.McpShape;
 import me.micartey.viro.shapes.Path;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class ShapeTools {
 
     private final ApplicationContext context;
-    private final Window             window;
+    private final Canvas             canvas;
 
     /**
      * Draw a shape (list of connected points)
@@ -71,12 +71,12 @@ public class ShapeTools {
             description = "Delete a shape by id. An id is returned when calling 'drawShape'"
     )
     public void deleteShape(int shapeId) {
-        this.window.getVisible().stream().filter(shape -> shape.hashCode() == shapeId).findFirst().ifPresent(shape -> {
-            this.window.getVisible().remove(shape);
-            this.window.getInvisible().add(shape);
+        this.canvas.getVisible().stream().filter(shape -> shape.hashCode() == shapeId).findFirst().ifPresent(shape -> {
+            this.canvas.getVisible().remove(shape);
+            this.canvas.getInvisible().add(shape);
         });
 
-        this.window.repaint();
+        this.canvas.repaint();
     }
 
     /**
@@ -90,7 +90,7 @@ public class ShapeTools {
             description = "Get the shape position by id a shapes position can be transformed"
     )
     public Set<PathPoint> getPositionById(int shapeId) {
-        Optional<Shape> match = this.window.getVisible().stream().filter(shape -> shape.hashCode() == shapeId)
+        Optional<Shape> match = this.canvas.getVisible().stream().filter(shape -> shape.hashCode() == shapeId)
                 .findFirst();
 
         if (match.isEmpty()) {
@@ -116,7 +116,7 @@ public class ShapeTools {
             description = "Get all shapes and their path points"
     )
     public Set<McpShape> getShapes() {
-        return this.window.getVisible().stream()
+        return this.canvas.getVisible().stream()
                 .map(shape -> new McpShape(shape.getPoints().stream().map(point -> new PathPoint(point.getX(), point.getY(), shape.getWidth())).collect(Collectors.toList())))
                 .collect(Collectors.toSet());
     }

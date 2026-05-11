@@ -67,6 +67,10 @@ Or use nix (recommended):
 nix run github:micartey/viro --no-sandbox
 ```
 
+<!-- 
+nix run "github:micartey/viro/refactor/gradle-migration" --no-sandbox 
+-->
+
 ### Requirements
 
 - Java 17+

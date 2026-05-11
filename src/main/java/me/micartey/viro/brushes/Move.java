@@ -9,8 +9,7 @@ import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
-import me.micartey.viro.window.Window;
-import org.springframework.beans.factory.annotation.Autowired;
+import me.micartey.viro.window.Canvas;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,15 +29,15 @@ public class Move extends Brush {
     }
 
     @Observe
-    public void onPress(MousePressEvent event, Window window) {
-        List<Shape> collected = window.getVisible().stream().filter(shape -> shape.select(event.getPosition()))
+    public void onPress(MousePressEvent event, Canvas canvas) {
+        List<Shape> collected = canvas.getVisible().stream().filter(shape -> shape.select(event.getPosition()))
                 .distinct()
                 .collect(Collectors.toList());
 
 //        collected.addAll(selection.getShapes()); // TODO:
 
-        window.getVisible().removeAll(collected);
-        window.repaint();
+        canvas.getVisible().removeAll(collected);
+        canvas.repaint();
 
         this.shapes.clear();
 //        selection.getShapes().clear();
@@ -47,23 +46,23 @@ public class Move extends Brush {
     }
 
     @Observe
-    public void onMove(MouseDragEvent event, Window window) {
+    public void onMove(MouseDragEvent event, Canvas canvas) {
         Position translation = event.getSource().direction(event.getDestination());
 
-        Color color = window.getPreviewGraphics().getColor();
-        window.getPreviewGraphics().reset();
+        Color color = canvas.getPreviewGraphics().getColor();
+        canvas.getPreviewGraphics().reset();
 
         this.shapes.forEach(shape -> {
             shape.translate(translation);
-            shape.draw(window.getPreviewGraphics());
+            shape.draw(canvas.getPreviewGraphics());
         });
 
-        window.getPreviewGraphics().setColor(color);
+        canvas.getPreviewGraphics().setColor(color);
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, Window window) {
-        window.getVisible().addAll(this.shapes);
-        window.repaint();
+    public void onRelease(MouseReleaseEvent event, Canvas canvas) {
+        canvas.getVisible().addAll(this.shapes);
+        canvas.repaint();
     }
 }

@@ -6,7 +6,7 @@ import me.micartey.jation.annotations.Observe;
 import me.micartey.viro.events.mouse.MouseDragEvent;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.shapes.Shape;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,28 +28,28 @@ public class Eraser extends Brush {
     }
 
     @Observe
-    public void onDrag(MouseDragEvent event, Window window) {
+    public void onDrag(MouseDragEvent event, Canvas canvas) {
         this.drawHighlighter(
                 event.getDestination(),
-                window.getPreviewGraphics(),
+                canvas.getPreviewGraphics(),
                 this.radius
         );
 
-        List<Shape> shapes = window.getVisible().stream()
+        List<Shape> shapes = canvas.getVisible().stream()
                 .filter(shape -> shape.select(event.getDestination()))
                 .collect(Collectors.toList());
 
         if (shapes.isEmpty())
             return;
 
-        window.getVisible().removeAll(shapes);
-        window.getInvisible().addAll(shapes);
-        window.repaint();
+        canvas.getVisible().removeAll(shapes);
+        canvas.getInvisible().addAll(shapes);
+        canvas.repaint();
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, Window window) {
-        window.getPreviewGraphics().reset();
+    public void onRelease(MouseReleaseEvent event, Canvas canvas) {
+        canvas.getPreviewGraphics().reset();
     }
 
     private void drawHighlighter(Position position, GraphicsWrapper graphics, int radius) {

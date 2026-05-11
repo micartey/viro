@@ -3,15 +3,14 @@ package me.micartey.viro.factories;
 import lombok.NonNull;
 import me.micartey.jation.JationObserver;
 import me.micartey.jation.interfaces.JationEvent;
+import me.micartey.viro.mcp.CanvasTools;
 import me.micartey.viro.mcp.ImageTools;
 import me.micartey.viro.mcp.ShapeTools;
-import me.micartey.viro.mcp.WindowTools;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 
 @Configuration
 public class BeanFactory {
@@ -28,9 +27,9 @@ public class BeanFactory {
     }
 
     @Bean
-    public ToolCallbackProvider tools(ShapeTools shapeTool, WindowTools windowTools, ImageTools imageTools) {
+    public ToolCallbackProvider tools(ShapeTools shapeTool, CanvasTools canvasTools, ImageTools imageTools) {
         return MethodToolCallbackProvider.builder()
-                .toolObjects(shapeTool, windowTools, imageTools)
+                .toolObjects(shapeTool, canvasTools, imageTools)
                 .build();
     }
 }

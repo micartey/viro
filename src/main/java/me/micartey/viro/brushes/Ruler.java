@@ -7,7 +7,7 @@ import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.events.mouse.MouseScrollEvent;
 import me.micartey.viro.shapes.Path;
 import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,8 +28,8 @@ public class Ruler extends Brush {
     }
 
     @Observe
-    public void onDrag(MouseDragEvent event, Window window) {
-        GraphicsWrapper wrapper = window.getPreviewGraphics();
+    public void onDrag(MouseDragEvent event, Canvas canvas) {
+        GraphicsWrapper wrapper = canvas.getPreviewGraphics();
 
         this.destination = event.getDestination();
         this.origin = event.getOrigin();
@@ -38,17 +38,17 @@ public class Ruler extends Brush {
     }
 
     @Observe
-    public void onScroll(MouseScrollEvent event, Window window) {
-        this.draw(window.getPreviewGraphics());
+    public void onScroll(MouseScrollEvent event, Canvas canvas) {
+        this.draw(canvas.getPreviewGraphics());
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Window window) {
+    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Canvas canvas) {
         if (this.destination == null || this.origin == null)
             return;
 
         Map<Position, Integer> points = new LinkedHashMap<>();
-        points.put(this.origin, window.getPreviewGraphics().getLineWidth());
+        points.put(this.origin, canvas.getPreviewGraphics().getLineWidth());
 
         /*
          * Fill point in between to make erasing possible
@@ -56,15 +56,15 @@ public class Ruler extends Brush {
          */
         Position direction = this.origin.direction(this.destination).normalize();
         for (double step = 0; step < this.origin.distance(this.destination); step += 3) {
-            points.put(this.origin.translate(direction.multiply(step)), window.getPreviewGraphics().getLineWidth());
+            points.put(this.origin.translate(direction.multiply(step)), canvas.getPreviewGraphics().getLineWidth());
         }
 
-        points.put(this.destination, window.getPreviewGraphics().getLineWidth());
+        points.put(this.destination, canvas.getPreviewGraphics().getLineWidth());
 
         this.submit(new Path(
                 points,
                 radialMenu.getColor(),
-                window.getPreviewGraphics().getLineWidth()
+                canvas.getPreviewGraphics().getLineWidth()
         ));
 
         this.destination = null;

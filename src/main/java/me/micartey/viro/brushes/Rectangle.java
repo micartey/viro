@@ -6,7 +6,7 @@ import me.micartey.viro.events.mouse.MouseDragEvent;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.events.mouse.MouseScrollEvent;
 import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ public class Rectangle extends Brush {
     }
 
     @Observe
-    public void onDrag(MouseDragEvent event, Window window) {
+    public void onDrag(MouseDragEvent event, Canvas canvas) {
         this.position = new Position(
                 Math.min(event.getOrigin().getX(), event.getDestination().getX()),
                 Math.min(event.getOrigin().getY(), event.getDestination().getY())
@@ -35,22 +35,22 @@ public class Rectangle extends Brush {
                 Math.abs(event.getOrigin().getY() - event.getDestination().getY())
         );
 
-        this.draw(window.getPreviewGraphics());
+        this.draw(canvas.getPreviewGraphics());
     }
 
     @Observe
-    public void onScroll(MouseScrollEvent event, Window window) {
-        this.draw(window.getPreviewGraphics());
+    public void onScroll(MouseScrollEvent event, Canvas canvas) {
+        this.draw(canvas.getPreviewGraphics());
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Window window) {
+    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Canvas canvas) {
         if (this.position == null || this.size == null)
             return;
 
         this.submit(new me.micartey.viro.shapes.Rectangle(
                 radialMenu.getColor(),
-                window.getPreviewGraphics().getLineWidth(),
+                canvas.getPreviewGraphics().getLineWidth(),
                 this.position,
                 this.size
         ));

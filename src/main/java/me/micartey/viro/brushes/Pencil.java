@@ -3,12 +3,11 @@ package me.micartey.viro.brushes;
 import me.micartey.jation.JationObserver;
 import me.micartey.jation.annotations.Observe;
 import me.micartey.viro.events.mouse.MouseDragEvent;
-import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.Path;
 import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +33,8 @@ public class Pencil extends Brush {
     }
 
     @Observe
-    public void onDrag(MouseDragEvent event, Window window) {
-        GraphicsWrapper wrapper = window.getPreviewGraphics();
+    public void onDrag(MouseDragEvent event, Canvas canvas) {
+        GraphicsWrapper wrapper = canvas.getPreviewGraphics();
 
         Position lastPosition = !this.positions.isEmpty() ? this.positions.keySet().toArray(new Position[]{})[this.positions.size() - 1] : event.getSource();
         Position position = new Position(
@@ -49,11 +48,11 @@ public class Pencil extends Brush {
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Window window) {
+    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Canvas canvas) {
         this.submit(new Path(
                 this.positions,
                 radialMenu.getColor(),
-                window.getPreviewGraphics().getLineWidth()
+                canvas.getPreviewGraphics().getLineWidth()
         ));
 
         this.positions.clear();

@@ -2,7 +2,6 @@ package me.micartey.viro.window;
 
 import javafx.event.Event;
 import javafx.scene.Cursor;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Screen;
 import lombok.Getter;
@@ -28,13 +27,13 @@ import java.util.List;
 import java.util.Stack;
 
 @Component
-public class Window extends CanvasWrapper {
+public class Canvas extends CanvasWrapper {
 
     private final JationObserver observer;
     private final Settings       settings;
 
-    @Getter private final GraphicsWrapper previewGraphics;
-    @Getter private final Canvas          previewCanvas;
+    @Getter private final GraphicsWrapper            previewGraphics;
+    @Getter private final javafx.scene.canvas.Canvas previewCanvas;
 
     @Getter private final Stack<Shape> visible   = new Stack<>();
     @Getter private final Stack<Shape> invisible = new Stack<>();
@@ -44,7 +43,7 @@ public class Window extends CanvasWrapper {
     @Value("${viro.brush.width.max}")
     private Integer maxWidth;
 
-    public Window(@Value("${application.title}") String title, @Value("${application.icon}") String icon, @Value("${viro.brush.width.default}") Integer width, Settings settings, JationObserver observer) {
+    public Canvas(@Value("${application.title}") String title, @Value("${application.icon}") String icon, @Value("${viro.brush.width.default}") Integer width, Settings settings, JationObserver observer) {
         super(icon, title, new Position(0, 0), new Position(
                 Screen.getPrimary().getBounds().getMaxX(),
                 Screen.getPrimary().getBounds().getMaxY()
@@ -67,8 +66,8 @@ public class Window extends CanvasWrapper {
 
         this.buttons.add(
                 new IconButton(this, this.observer, settings)
-                        .setX((int) Screen.getPrimary().getBounds().getMaxX() - 40)
-                        .setY((int) Screen.getPrimary().getBounds().getMaxY() - 70)
+                        .setX(40)
+                        .setY((int) Screen.getPrimary().getBounds().getMaxY() - 40)
                         .setIcon("/assets/controls/quit.png")
                         .onClick(() -> {
                             System.exit(0);
@@ -81,7 +80,7 @@ public class Window extends CanvasWrapper {
     }
 
     /**
-     * Apply visual settings to the {@link Window Window}
+     * Apply visual settings to the {@link Canvas Window}
      */
     @EventListener({ApplicationStartedEvent.class, SettingUpdateEvent.class})
     public void onSettingsUpdate() {
@@ -155,12 +154,6 @@ public class Window extends CanvasWrapper {
      */
     @Override
     public void paintComponent(GraphicsWrapper graphics) {
-//        Platform.runLater(() -> {
-//            visible.forEach(shape -> {
-//                shape.draw(graphics);
-//            });
-//        });
-
         visible.forEach(shape -> {
             shape.draw(graphics);
         });
