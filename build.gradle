@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.openjfx:javafx-fxml:17'
 
     implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc:1.1.0'
+    implementation 'org.springaicommunity:mcp-annotations:0.7.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

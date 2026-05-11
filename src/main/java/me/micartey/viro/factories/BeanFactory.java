@@ -26,10 +26,10 @@ public class BeanFactory {
         };
     }
 
-    @Bean
-    public ToolCallbackProvider tools(ShapeTools shapeTool, CanvasTools canvasTools, ImageTools imageTools) {
-        return MethodToolCallbackProvider.builder()
-                .toolObjects(shapeTool, canvasTools, imageTools)
-                .build();
-    }
+//    @Bean
+//    public ToolCallbackProvider tools(ShapeTools shapeTool, CanvasTools canvasTools, ImageTools imageTools) {
+//        return MethodToolCallbackProvider.builder()
+//                .toolObjects(shapeTool, canvasTools, imageTools)
+//                .build();
+//    }
 }
