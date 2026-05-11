@@ -21,7 +21,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc:1.1.0'
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
 
@@ -33,6 +32,8 @@ dependencies {
     implementation 'org.openjfx:javafx-controls:17'
     implementation 'org.openjfx:javafx-fxml:17'
 
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc:1.1.0'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -40,22 +41,22 @@ springBoot {
     mainClass = 'me.micartey.viro.Application'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     def javafxJmods = System.getenv("JAVAFX_JMODS")
     if (javafxJmods != null && !javafxJmods.isEmpty()) {
         options.compilerArgs += [
-            '--module-path', javafxJmods,
-            '--add-modules', 'javafx.controls,javafx.fxml'
+                '--module-path', javafxJmods,
+                '--add-modules', 'javafx.controls,javafx.fxml'
         ]
     }
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     def javafxJmods = System.getenv("JAVAFX_JMODS")
     if (javafxJmods != null && !javafxJmods.isEmpty()) {
         jvmArgs += [
-            '--module-path', javafxJmods,
-            '--add-modules', 'javafx.controls,javafx.fxml'
+                '--module-path', javafxJmods,
+                '--add-modules', 'javafx.controls,javafx.fxml'
         ]
     }
 }
