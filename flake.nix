@@ -26,8 +26,7 @@
 
         javaFxJdk = pkgs.jdk17.override { enableJavaFX = true; };
 
-        # Use mkDerivation with Gradle
-        mkViro = pkgs.stdenv.mkDerivation rec {
+        mkViro = pkgs.stdenv.mkDerivation (finalAttrs: {
           pname = "viro";
           version = "1.0";
 
@@ -36,11 +35,18 @@
           nativeBuildInputs = [ javaFxJdk pkgs.gradle_8 ];
           buildInputs = [ javaFxJdk ];
 
-          buildPhase = ''
+          # Replaces the need for disabling the sandbox
+          mitmCache = pkgs.gradle_8.fetchDeps {
+            pkg = finalAttrs.finalPackage;
+            data = ./deps.json;
+          };
+
+          gradleBuildTask = "bootJar";
+          gradleFlags = [ "-x" "test" ];
+
+          preBuild = ''
             export JAVA_HOME=${javaFxJdk}
-            export GRADLE_HOME=${pkgs.gradle_8}
             export JAVAFX_JMODS=${javaFxJdk}/lib/openjdk/jmods
-            $GRADLE_HOME/bin/gradle --no-daemon bootJar -x test
           '';
 
           installPhase = ''
@@ -64,17 +70,15 @@
           '';
 
           meta.mainProgram = "viro";
-        };
+        });
 
       in
       {
-        # nix build .#viro
         packages = {
           default = mkViro;
           viro = mkViro;
         };
 
-        # nix run .#viro
         apps = rec {
           default = {
             type = "app";

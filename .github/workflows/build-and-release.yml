@@ -27,6 +27,7 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew bootJar -x test --no-daemon
+        shell: bash
 
       - name: Find JAR file
         id: find-jar
