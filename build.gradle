@@ -31,6 +31,7 @@ dependencies {
     // JavaFX
     implementation 'org.openjfx:javafx-controls:17'
     implementation 'org.openjfx:javafx-fxml:17'
+    implementation 'org.openjfx:javafx-graphics:17'
 
     implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc:1.1.0'
     implementation 'org.springaicommunity:mcp-annotations:0.7.0'
@@ -47,7 +48,7 @@ tasks.withType(JavaCompile).configureEach {
     if (javafxJmods != null && !javafxJmods.isEmpty()) {
         options.compilerArgs += [
                 '--module-path', javafxJmods,
-                '--add-modules', 'javafx.controls,javafx.fxml'
+                '--add-modules', 'javafx.controls,javafx.fxml,javafx.graphics'
         ]
     }
 }
@@ -57,7 +58,7 @@ tasks.withType(Test).configureEach {
     if (javafxJmods != null && !javafxJmods.isEmpty()) {
         jvmArgs += [
                 '--module-path', javafxJmods,
-                '--add-modules', 'javafx.controls,javafx.fxml'
+                '--add-modules', 'javafx.controls,javafx.fxml,javafx.graphics'
         ]
     }
 }
