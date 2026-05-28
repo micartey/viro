@@ -48,6 +48,10 @@
    "jar": "sha256-dmrSoHg/JoeWLIrXTO7MOKKLn3Ki0IXuQ4t4E+ko0Mc=",
    "pom": "sha256-GYidvfGyVLJgGl7mRbgUepdGRIgil2hMeYr+XWPXjf4="
   },
+  "com/google/gradle#osdetector-gradle-plugin/1.7.3": {
+   "jar": "sha256-a0aS+ROiGx+2Axae54uo8+SrKvnXYq+cqIt5EmwcCtE=",
+   "pom": "sha256-hGDJUBJ8o1mHZhYeOLT/jWO01p+4MQoW4As1E1ABDBE="
+  },
   "commons-codec#commons-codec/1.17.1": {
    "jar": "sha256-+fbLED8t3DyZqdgK2irnvwaFER/Wv/zLcgM9HaTm/yM=",
    "pom": "sha256-f6DbTYFQ2vkylYuK6onuJKu00Y4jFqXeU1J4/BMVEqA="
@@ -63,6 +67,10 @@
    "jar": "sha256-nohe7E/AtxUqe7oWZABAhcZmOjyTsKYkY75zCLAFvkw=",
    "module": "sha256-MnseqM8InsEvY9Xgh/8ZyMzmaIVtSY/gjRD34VwSzHc=",
    "pom": "sha256-ge5zHnvYkuwZQyEhgKaE1lrH0329PkPlyDMkCuQXOKw="
+  },
+  "kr/motd/maven#os-maven-plugin/1.7.1": {
+   "jar": "sha256-9Hru+Ggh5SsrGHWJeL0EXwPXIikuMudHCCEixiKJUuA=",
+   "pom": "sha256-S3WABEIrljPdMY8p54Tx0YC9ilkgzVCvGTCGH21qVHY="
   },
   "net/java/dev/jna#jna-platform/5.17.0": {
    "jar": "sha256-t+PUbIe60utAmw5wSRa82BIGFo41cxLf3dDiU2ec2eA=",
@@ -147,6 +155,14 @@
   "org/junit#junit-bom/5.12.2": {
    "module": "sha256-3nCsXZGlJlbYiQptI7ngTZm5mxoEAlMN7K1xvzGyc14=",
    "pom": "sha256-zvgP7IZFT2gGv7DfJGabXG8y4styhTnqhZ9H39ybvBc="
+  },
+  "org/openjfx#javafx-plugin/0.1.0": {
+   "jar": "sha256-Xq7sB5m0QGRrDKTP2iGaMttr4rpXktAyoNpKOlw4j6s=",
+   "module": "sha256-rf+3RA0kntF8BJOD1nBp+UU7F3gncMAFtoKkNBbYNmE=",
+   "pom": "sha256-NMjfVSfrWjXl8AmjzeH3oInEzkoOclgC8uy+UDu9PLY="
+  },
+  "org/openjfx/javafxplugin#org.openjfx.javafxplugin.gradle.plugin/0.1.0": {
+   "pom": "sha256-1tASf/Q2PQAXPDV6mByec+/wPDCl0Ohq2CtgVPrvqEE="
   },
   "org/slf4j#slf4j-api/1.7.36": {
    "jar": "sha256-0+9XXj5JeWeNwBvx3M5RAhSTtNEft/G+itmCh3wWocA=",
@@ -688,17 +704,29 @@
    "jar": "sha256-QXyS+vWQVn8vI0Ml7/Hd3Z2Ba4qcN/XuJVsMhRbSM+A=",
    "pom": "sha256-uLgDYSRg1flc6XS9XYRx1G4/aOzteCfdjUSRwDAi9yU="
   },
+  "org/openjfx#javafx-base/17/linux": {
+   "jar": "sha256-JDzahjaTFMNLsQvgAj88mFaCNcpN7UpZ4Hgd1kC8SWI="
+  },
   "org/openjfx#javafx-controls/17": {
    "jar": "sha256-g2/cXGahFaj0EpZ3bSmK/J9u43F/6yxNdQnPJZjcoBs=",
    "pom": "sha256-6UfbVFcEn1pKxmiSa2QUtLCRglYerVymiyNSTg4cwD8="
+  },
+  "org/openjfx#javafx-controls/17/linux": {
+   "jar": "sha256-pa085GMw/aiPjx4/ue8E1kR2O6C2mpXkl66JTjWdrQg="
   },
   "org/openjfx#javafx-fxml/17": {
    "jar": "sha256-7FVykIm0puW/HyBzFzYpqLB4ccWSblMBBe3hnlkU5Po=",
    "pom": "sha256-5+IA5aFv3qbIDne2IhWyVMt9thHEy9K9jGtVeLt39oE="
   },
+  "org/openjfx#javafx-fxml/17/linux": {
+   "jar": "sha256-pkXtb3SSd3px+3c/IPO1OuIh9U0Fnl3p0dD2cmyam68="
+  },
   "org/openjfx#javafx-graphics/17": {
    "jar": "sha256-PaHXkyPZGWsFYBxIh3LlI8TS5ruJxXl/UYkb8v1vjqs=",
    "pom": "sha256-3RVlTvq6FiyolcdAxqA7vUEu8XNwyMcOq9j6PTUer+I="
+  },
+  "org/openjfx#javafx-graphics/17/linux": {
+   "jar": "sha256-YIAnF9iwTwE25rLNS5BGiQBSVml3328MF/dT+0eJ/aY="
   },
   "org/openjfx#javafx/17": {
    "pom": "sha256-Mc+sHCBGlsqDJZzWCcK2kks3dBR+MOM9vEX+kKHnuww="
