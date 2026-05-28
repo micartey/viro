@@ -1,6 +1,5 @@
 package me.micartey.viro.window.components;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -15,7 +14,7 @@ import me.micartey.viro.events.mouse.MouseMoveEvent;
 import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.utilities.Position;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +37,14 @@ public class IconButton {
     private int size = 30;
     private int x, y;
 
-    public IconButton(Window window, JationObserver jationObserver, Settings settings) {
+    public IconButton(Canvas window, JationObserver jationObserver, Settings settings) {
         this.listeners = new ArrayList<>();
 
         /*
          * Create a new overlay canvas
          * We need to propagate the mouse events to the underlaying canvas (preview canvas)
          */
-        Canvas canvas = window.createCanvasOnTop();
+        javafx.scene.canvas.Canvas canvas = window.createCanvasOnTop();
         canvas.setMouseTransparent(true);
 
         this.graphicsContext = canvas.getGraphicsContext2D();

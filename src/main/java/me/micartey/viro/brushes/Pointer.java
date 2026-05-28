@@ -1,8 +1,6 @@
 package me.micartey.viro.brushes;
 
-import javafx.application.Platform;
 import javafx.scene.paint.Color;
-import lombok.SneakyThrows;
 import me.micartey.jation.JationObserver;
 import me.micartey.jation.annotations.Observe;
 import me.micartey.viro.events.mouse.MouseDragEvent;
@@ -11,13 +9,12 @@ import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.ConcurrentModificationException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -44,12 +41,12 @@ public class Pointer extends Brush {
     }
 
     @Observe
-    public void onPress(MousePressEvent event, Window window, RadialMenu radialMenu) {
+    public void onPress(MousePressEvent event, Canvas canvas, RadialMenu radialMenu) {
         Runnable task = () -> {
             try {
                 draw(
                         new LinkedHashMap<>(positions),
-                        window.getPreviewGraphics()
+                        canvas.getPreviewGraphics()
                 );
             } catch(Exception e) {
                 // ignore
@@ -66,9 +63,9 @@ public class Pointer extends Brush {
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, Window window) {
+    public void onRelease(MouseReleaseEvent event, Canvas canvas) {
         this.executor.shutdownNow();
-        window.getPreviewGraphics().reset();
+        canvas.getPreviewGraphics().reset();
     }
 
     private void draw(Map<Position, Long> positions, GraphicsWrapper graphics) {

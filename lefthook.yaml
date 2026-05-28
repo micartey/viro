@@ -1,4 +1,0 @@
-pre-commit:
-    commands:
-        nix-build:
-            run: nix build .#viro

@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+group = 'me.micartey'
+version = '1.0'
+
+java {
+    sourceCompatibility = JavaVersion.toVersion('17')
+    targetCompatibility = JavaVersion.toVersion('17')
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'micartey-public'
+        url = uri('https://artifacts.micartey.dev/public')
+    }
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    // Viro dependencies
+    implementation 'me.micartey:jation:2.4.1'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.11'
+
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc:1.1.0'
+    implementation 'org.springaicommunity:mcp-annotations:0.7.0'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+javafx {
+    version = '17'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics']
+}
+
+springBoot {
+    mainClass = 'me.micartey.viro.Application'
+}
+

@@ -64,8 +64,12 @@ Go to the [releases](https://github.com/micartey/viro/releases) and download the
 Or use nix (recommended):
 
 ```bash
-nix run github:micartey/viro
+nix run github:micartey/viro --no-sandbox
 ```
+
+<!-- 
+nix run "github:micartey/viro/refactor/gradle-migration" --no-sandbox 
+-->
 
 ### Requirements
 

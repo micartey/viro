@@ -2,13 +2,10 @@ package me.micartey.viro.input;
 
 import javafx.scene.input.KeyCode;
 import lombok.RequiredArgsConstructor;
-import me.micartey.jation.JationObserver;
 import me.micartey.viro.events.viro.KeyPressEvent;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.window.GraphicsImport;
-import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
-import org.springframework.beans.factory.annotation.Autowired;
+import me.micartey.viro.window.Canvas;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
@@ -26,18 +23,18 @@ public class KeyboardObserver {
     private final ApplicationContext context;
 
     private final GraphicsImport graphicsImport;
-    private final Settings       settings;
-    private final Window         window;
+    private final Settings settings;
+    private final Canvas   canvas;
 
     private final List<KeyCode> pressedKeys = new ArrayList<>();
 
     @EventListener({ApplicationStartedEvent.class})
     public void subscribeToKeyboardEvents() {
-        this.window.getScene().setOnKeyPressed(event -> {
+        this.canvas.getScene().setOnKeyPressed(event -> {
             pressedKeys.add(event.getCode());
         });
 
-        this.window.getScene().setOnKeyReleased(event -> {
+        this.canvas.getScene().setOnKeyReleased(event -> {
             KeyPressEvent keyPressEvent = new KeyPressEvent(new HashSet<>(pressedKeys));
             context.publishEvent(keyPressEvent);
 
@@ -52,7 +49,7 @@ public class KeyboardObserver {
         if (!event.getKeyCodes().containsAll(undoSet))
             return;
 
-        this.window.undo();
+        this.canvas.undo();
     }
 
     @EventListener({KeyPressEvent.class})
@@ -62,7 +59,7 @@ public class KeyboardObserver {
         if (!event.getKeyCodes().containsAll(redoSet))
             return;
 
-        this.window.redo();
+        this.canvas.redo();
     }
 
     /**
@@ -81,10 +78,10 @@ public class KeyboardObserver {
         if (!event.getKeyCodes().containsAll(clearSet))
             return;
 
-        while (!this.window.getVisible().isEmpty())
-            this.window.undo();
+        while (!this.canvas.getVisible().isEmpty())
+            this.canvas.undo();
 
-        this.window.setBackground(settings.getBackgroundColor());
+        this.canvas.setBackground(settings.getBackgroundColor());
     }
 
     @EventListener({KeyPressEvent.class})

@@ -1,0 +1,10 @@
+pluginManagement {
+    repositories {
+        flatDir {
+            dirs 'gradle/plugins'
+        }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'viro'

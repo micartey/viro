@@ -3,7 +3,7 @@ package me.micartey.viro.brushes;
 import me.micartey.jation.JationObserver;
 import me.micartey.jation.annotations.Observe;
 import me.micartey.viro.events.mouse.MouseDragEvent;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,13 +18,13 @@ public class Transform extends Brush {
     }
 
     @Observe
-    public void onDrag(MouseDragEvent event, Window window) {
+    public void onDrag(MouseDragEvent event, Canvas canvas) {
         Position translation = event.getSource().direction(event.getDestination());
 
-        Stream.concat(window.getVisible().stream(), window.getInvisible().stream()).forEach(shape -> {
+        Stream.concat(canvas.getVisible().stream(), canvas.getInvisible().stream()).forEach(shape -> {
             shape.translate(translation);
         });
 
-        window.repaint();
+        canvas.repaint();
     }
 }

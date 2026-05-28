@@ -9,7 +9,7 @@ import me.micartey.viro.brushes.Brush;
 import me.micartey.viro.events.mouse.*;
 import me.micartey.viro.settings.Settings;
 import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
@@ -20,22 +20,22 @@ public class MouseObserver {
 
     private final JationObserver observer;
     private final RadialMenu     radialMenu;
-    private final Settings       settings;
-    private final Window         window;
+    private final Settings settings;
+    private final Canvas   canvas;
 
     private Position origin, source;
 
-    public MouseObserver(Window window, Settings settings, RadialMenu radialMenu, JationObserver observer) {
+    public MouseObserver(Canvas canvas, Settings settings, RadialMenu radialMenu, JationObserver observer) {
         this.radialMenu = radialMenu;
         this.observer = observer;
         this.settings = settings;
-        this.window = window;
+        this.canvas = canvas;
 
-        window.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::onMove);
-        window.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_PRESSED, this::onPress);
-        window.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_DRAGGED, this::onDrag);
-        window.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_RELEASED, this::onRelease);
-        window.getPreviewCanvas().addEventHandler(ScrollEvent.SCROLL, this::onScroll);
+        canvas.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_MOVED, this::onMove);
+        canvas.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_PRESSED, this::onPress);
+        canvas.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_DRAGGED, this::onDrag);
+        canvas.getPreviewCanvas().addEventHandler(MouseEvent.MOUSE_RELEASED, this::onRelease);
+        canvas.getPreviewCanvas().addEventHandler(ScrollEvent.SCROLL, this::onScroll);
     }
 
     @EventListener(ApplicationStartedEvent.class)
@@ -95,7 +95,7 @@ public class MouseObserver {
                 this.observer,
                 this.radialMenu,
                 this.settings,
-                this.window,
+                this.canvas,
                 event
         );
     }
@@ -118,7 +118,7 @@ public class MouseObserver {
                 this.observer,
                 this.radialMenu,
                 this.settings,
-                this.window,
+                this.canvas,
                 event
         );
     }
@@ -140,7 +140,7 @@ public class MouseObserver {
                 this.observer,
                 this.radialMenu,
                 this.settings,
-                this.window,
+                this.canvas,
                 event
         );
     }
@@ -160,7 +160,7 @@ public class MouseObserver {
                 this.observer,
                 this.radialMenu,
                 this.settings,
-                this.window,
+                this.canvas,
                 event
         );
     }
@@ -180,7 +180,7 @@ public class MouseObserver {
                 this.observer,
                 this.radialMenu,
                 this.settings,
-                this.window,
+                this.canvas,
                 event
         );
     }

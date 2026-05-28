@@ -9,12 +9,10 @@ import me.micartey.viro.events.mouse.MousePressEvent;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -44,28 +42,28 @@ public class Selection extends Brush {
     }
 
     @Observe
-    public void onDrag(MouseDragEvent event, Window window) {
+    public void onDrag(MouseDragEvent event, Canvas canvas) {
         this.draw(
-                window.getPreviewGraphics(),
+                canvas.getPreviewGraphics(),
                 event.getOrigin(),
                 event.getDestination()
         );
 
-        window.getVisible().stream().filter(shape -> this.inSelection(shape, event.getOrigin(), event.getDestination()))
+        canvas.getVisible().stream().filter(shape -> this.inSelection(shape, event.getOrigin(), event.getDestination()))
                 .filter(shape -> !this.shapes.contains(shape))
                 .forEach(this.shapes::add);
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, Window window, RadialMenu radialMenu) {
+    public void onRelease(MouseReleaseEvent event, Canvas canvas, RadialMenu radialMenu) {
         List<Shape> backup = new LinkedList<>(this.shapes);
 
         this.shapes.clear();
 
-        backup.stream().distinct().sorted(Comparator.comparingInt(shape -> window.getVisible().search(shape)))
+        backup.stream().distinct().sorted(Comparator.comparingInt(shape -> canvas.getVisible().search(shape)))
                 .forEach(this.shapes::add);
 
-        window.getPreviewGraphics().reset();
+        canvas.getPreviewGraphics().reset();
 
         if (backup.isEmpty())
             return;

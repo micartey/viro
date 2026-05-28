@@ -25,8 +25,9 @@ jobs:
           java-version: "21"
           distribution: "zulu"
 
-      - name: Build with Maven
-        run: mvn package -B -DskipTests=true -f pom.xml
+      - name: Build with Gradle
+        run: ./gradlew bootJar -x test --no-daemon
+        shell: bash
 
       - name: Find JAR file
         id: find-jar
@@ -34,7 +35,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const files = fs.readdirSync('./target').filter(fn => fn.endsWith('.jar'));
+            const files = fs.readdirSync('./build/libs').filter(fn => fn.endsWith('.jar'));
             if (files.length > 0) {
               core.setOutput('jar_name', files[0]);
             } else {
@@ -43,14 +44,14 @@ jobs:
 
       - name: Rename JAR file
         run: |
-          mv ./target/${{ steps.find-jar.outputs.jar_name }} ./target/${{ matrix.os-name }}-viro.jar
+          mv ./build/libs/${{ steps.find-jar.outputs.jar_name }} ./build/libs/${{ matrix.os-name }}-viro.jar
         shell: bash
 
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os-name }}
-          path: ./target/${{ matrix.os-name }}-viro.jar
+          path: ./build/libs/${{ matrix.os-name }}-viro.jar
 
   release:
     needs: build
@@ -60,7 +61,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: target/
+          path: build/libs/
 
       - name: Get short SHA
         id: short-sha
@@ -83,7 +84,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/linux/linux-viro.jar
+          asset_path: ./build/libs/linux/linux-viro.jar
           asset_name: viro-linux-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive
 
@@ -93,6 +94,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/windows/windows-viro.jar
+          asset_path: ./build/libs/windows/windows-viro.jar
           asset_name: viro-windows-${{ env.SHORT_SHA }}.jar
           asset_content_type: application/java-archive

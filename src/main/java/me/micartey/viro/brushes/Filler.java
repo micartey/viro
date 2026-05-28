@@ -6,7 +6,7 @@ import me.micartey.jation.annotations.Observe;
 import me.micartey.viro.events.mouse.MouseReleaseEvent;
 import me.micartey.viro.shapes.Polygon;
 import me.micartey.viro.window.RadialMenu;
-import me.micartey.viro.window.Window;
+import me.micartey.viro.window.Canvas;
 import me.micartey.viro.shapes.utilities.Position;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
@@ -35,33 +35,33 @@ public class Filler extends Brush {
     }
 
     @Observe
-    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Window window) {
+    public void onRelease(MouseReleaseEvent event, RadialMenu radialMenu, Canvas canvas) {
         /*
          * Special case: Everyting is empty.
          *
          * User is attempting to color the entire canvas
          */
-        if (window.getVisible().isEmpty()) {
-            window.setBackground(radialMenu.getColor());
+        if (canvas.getVisible().isEmpty()) {
+            canvas.setBackground(radialMenu.getColor());
             return;
         }
 
         // TODO: Refactor
         EXECUTOR_SERVICE.submit(() -> {
-            List<Position> positions = this.computeEdges(event.getPosition(), window);
+            List<Position> positions = this.computeEdges(event.getPosition(), canvas);
 
             this.filterPositions(positions);
 
             this.submit(new Polygon(
                     radialMenu.getColor(),
-                    window.getPreviewGraphics().getLineWidth(),
+                    canvas.getPreviewGraphics().getLineWidth(),
                     positions.toArray(new Position[] {})
             ));
         });
     }
 
     @SneakyThrows
-    private List<Position> computeEdges(Position position, Window window) {
+    private List<Position> computeEdges(Position position, Canvas canvas) {
         Map<Integer, Position> positions = new HashMap<>();
 
         /*
@@ -84,7 +84,7 @@ public class Filler extends Brush {
                                 i * Math.sin(part) + position.getY()
                         );
 
-                        if (window.getVisible().stream().anyMatch(shape -> shape.select(ray))) {
+                        if (canvas.getVisible().stream().anyMatch(shape -> shape.select(ray))) {
                             positions.put(index, ray);
                             break;
                         }
