@@ -23,9 +23,18 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
+/**
+ * Import images from disk.
+ * <br />
+ * The import will first create an overlay to scale and preview the image before importing it.
+ * This makes re-drawing of the image (e.g. when scaling) faster and less intensive.
+ */
 @Component
 public class GraphicsImport extends CanvasWrapper {
 
+    /**
+     * The lock prevents one from opening multiple import windows in parallel.
+     */
     private static final ReentrantLock LOCK = new ReentrantLock();
 
     private Image  image;

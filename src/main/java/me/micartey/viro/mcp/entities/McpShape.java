@@ -1,4 +1,4 @@
-package me.micartey.viro.mcp.objects;
+package me.micartey.viro.mcp.entities;
 
 import java.util.List;
 

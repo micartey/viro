@@ -29,11 +29,10 @@ import java.util.Stack;
 @Component
 public class Canvas extends CanvasWrapper {
 
-    private final JationObserver observer;
-    private final Settings       settings;
+    private final Settings settings;
 
-    @Getter private final GraphicsWrapper            previewGraphics;
     @Getter private final javafx.scene.canvas.Canvas previewCanvas;
+    @Getter private final GraphicsWrapper            previewGraphics;
 
     @Getter private final Stack<Shape> visible   = new Stack<>();
     @Getter private final Stack<Shape> invisible = new Stack<>();
@@ -56,7 +55,6 @@ public class Canvas extends CanvasWrapper {
                 this.previewCanvas.getGraphicsContext2D()
         );
 
-        this.observer = observer;
         this.settings = settings;
 
         this.previewGraphics.setLineWidth(width);
@@ -65,7 +63,7 @@ public class Canvas extends CanvasWrapper {
         this.stage.setOnCloseRequest(Event::consume);
 
         this.buttons.add(
-                new IconButton(this, this.observer, settings)
+                new IconButton(this, observer, settings)
                         .setX(40)
                         .setY((int) Screen.getPrimary().getBounds().getMaxY() - 40)
                         .setIcon("/assets/controls/quit.png")
@@ -76,7 +74,7 @@ public class Canvas extends CanvasWrapper {
 
         this.buttons.forEach(IconButton::draw);
 
-        this.observer.subscribe(this);
+        observer.subscribe(this);
     }
 
     /**

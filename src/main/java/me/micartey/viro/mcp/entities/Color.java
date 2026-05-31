@@ -1,4 +1,4 @@
-package me.micartey.viro.mcp.objects;
+package me.micartey.viro.mcp.entities;
 
 public record Color(int red, int green, int blue, int alpha) {
 

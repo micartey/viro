@@ -1,8 +1,8 @@
 package me.micartey.viro.mcp;
 
 import lombok.RequiredArgsConstructor;
-import me.micartey.viro.mcp.objects.Color;
-import me.micartey.viro.mcp.objects.Resolution;
+import me.micartey.viro.mcp.entities.Color;
+import me.micartey.viro.mcp.entities.Resolution;
 import me.micartey.viro.window.Canvas;
 import org.springaicommunity.mcp.annotation.McpTool;
 import org.springaicommunity.mcp.annotation.McpToolParam;

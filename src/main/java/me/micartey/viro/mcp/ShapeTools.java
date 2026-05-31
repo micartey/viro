@@ -2,9 +2,9 @@ package me.micartey.viro.mcp;
 
 import lombok.RequiredArgsConstructor;
 import me.micartey.viro.events.viro.ShapeSubmitEvent;
-import me.micartey.viro.mcp.objects.Color;
-import me.micartey.viro.mcp.objects.PathPoint;
-import me.micartey.viro.mcp.objects.McpShape;
+import me.micartey.viro.mcp.entities.Color;
+import me.micartey.viro.mcp.entities.PathPoint;
+import me.micartey.viro.mcp.entities.McpShape;
 import me.micartey.viro.shapes.Path;
 import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
