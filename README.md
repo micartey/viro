@@ -93,6 +93,19 @@ For gemini-cli, you'll need to add the following:
 
 *(Please keep in mind that the syntax for this depends on the tool you use)*
 
+### Collaboration
+
+A **WIP** feature to let multiple people collaborate on a sketch.
+As this is peer-2-peer it doesn't work over the internet out of the box.
+Make sure you are in the same (virtual) network to be able to reach each other.
+
+```bash
+# You can list multiple peers using a "," as a seperator
+java -Dserver.port=8099 -Dviro.collab.peers=http://localhost:9999 -jar build/libs/viro-1.0.jar
+```
+
+This feature is entirly vibe-coded and will be refined in the future.
+
 ### Shortcuts
 
 There are some shortcuts you can use.

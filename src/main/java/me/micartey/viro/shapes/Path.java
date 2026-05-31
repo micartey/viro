@@ -4,10 +4,7 @@ import javafx.scene.paint.Color;
 import me.micartey.viro.shapes.utilities.Position;
 import me.micartey.viro.window.wrapper.GraphicsWrapper;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Path extends Shape {
 
@@ -70,5 +67,9 @@ public class Path extends Shape {
     @Override
     public Set<Position> getPoints() {
         return this.positions.keySet();
+    }
+
+    public Map<Position, Integer> getPositionWidthMap() {
+        return Collections.unmodifiableMap(this.positions);
     }
 }

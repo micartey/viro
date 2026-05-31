@@ -34,6 +34,14 @@ public class Rectangle extends Shape {
         return new HashSet<>(Arrays.asList(position, size));
     }
 
+    public Position getRectPosition() {
+        return position;
+    }
+
+    public Position getRectSize() {
+        return size;
+    }
+
     @Override
     public void translate(Position vector) {
         this.position = this.position.translate(vector);

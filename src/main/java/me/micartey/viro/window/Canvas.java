@@ -152,9 +152,11 @@ public class Canvas extends CanvasWrapper {
      */
     @Override
     public void paintComponent(GraphicsWrapper graphics) {
-        visible.forEach(shape -> {
-            shape.draw(graphics);
-        });
+        synchronized (visible) {
+            visible.forEach(shape -> {
+                shape.draw(graphics);
+            });
+        }
     }
 
     /**

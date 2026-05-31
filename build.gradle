@@ -28,6 +28,7 @@ dependencies {
     // Viro dependencies
     implementation 'me.micartey:jation:2.4.1'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.11'
+    implementation 'com.google.code.gson:gson:2.11.0'
 
     implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc:1.1.0'
     implementation 'org.springaicommunity:mcp-annotations:0.7.0'
