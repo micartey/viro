@@ -2,242 +2,159 @@ package me.micartey.viro.collab;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import me.micartey.viro.events.viro.ShapeSubmitEvent;
 import me.micartey.viro.shapes.Graphic;
 import me.micartey.viro.shapes.Shape;
-import me.micartey.viro.window.Canvas;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class CollabBridge {
 
-    private static final int DELETE_AFTER_MISSING = 2;
+    private static final int DELETE_AFTER_MISSING = 1;
 
-    private final Canvas canvas;
-    private final String origin;
-    private final RestTemplate rest;
+    private final CollabCanvas canvas;
+    private final CollabPeerClient peersClient;
+    private final CollabStore store;
     private final List<String> peers;
-    private final AtomicInteger nextId = new AtomicInteger(1);
-    private final AtomicInteger receiving = new AtomicInteger(0);
-    private final Map<Integer, Entry> entries = new ConcurrentHashMap<>();
 
-    private static class Entry {
-        final int id;
-        final String origin;
-        Shape shape;
-        String lastHash;
-        int missingCycles;
-
-        Entry(int id, String origin, Shape shape, String hash) {
-            this.id = id;
-            this.origin = origin;
-            this.shape = shape;
-            this.lastHash = hash;
-        }
-    }
-
-    public CollabBridge(Canvas canvas,
+    public CollabBridge(CollabCanvas canvas,
+                        CollabPeerClient peersClient,
                         @Value("${server.port:8099}") int port,
+                        @Value("${viro.collab.origin:}") String configuredOrigin,
                         @Value("${viro.collab.peers:}") String peersConfig) {
         this.canvas = canvas;
-        this.origin = String.valueOf(port);
-        this.rest = new RestTemplate();
-
-        List<String> initial = peersConfig != null && !peersConfig.isEmpty()
-                ? Arrays.asList(peersConfig.split(","))
-                : List.of();
-        this.peers = new CopyOnWriteArrayList<>(
-                initial.stream().map(String::trim).filter(s -> !s.isEmpty()).toList()
-        );
+        this.peersClient = peersClient;
+        this.store = new CollabStore(resolveOrigin(configuredOrigin, port));
+        this.peers = new CopyOnWriteArrayList<>(parsePeers(peersConfig));
     }
 
     @EventListener(ApplicationStartedEvent.class)
     public void seedExistingShapes() {
-        synchronized (canvas.getVisible()) {
-            for (Shape shape : canvas.getVisible()) {
-                if (shape instanceof Graphic) {
-                    continue;
-                }
-                int id = nextId.getAndIncrement();
-                String hash = CollabWire.contentHash(shape);
-                entries.put(id, new Entry(id, origin, shape, hash));
-                log.debug("Seeded existing shape {}", id);
-            }
+        for (Shape shape : canvas.visibleShapes()) {
+            CollabShapeEntry entry = store.addLocal(shape);
+            log.debug("Seeded existing shape {}", entry.id());
         }
     }
 
     @EventListener(ShapeSubmitEvent.class)
     public void onLocalShape(ShapeSubmitEvent event) {
-        if (isReceiving()) {
-            return;
-        }
         Shape shape = event.getShape();
         if (shape instanceof Graphic) {
             return;
         }
-        int id = nextId.getAndIncrement();
-        String hash = CollabWire.contentHash(shape);
-        entries.put(id, new Entry(id, origin, shape, hash));
 
-        if (!peers.isEmpty()) {
-            String json = CollabWire.toJson(id, origin, shape);
-            for (String peer : peers) {
-                post(peer, "/collab/shape", json);
-            }
-            log.debug("Broadcast new shape {}", id);
-        }
+        CollabShapeEntry entry = store.addLocal(shape);
+        broadcastShape(entry);
+        log.debug("Broadcast local shape {}", entry.id());
     }
 
-    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = 200, timeUnit = TimeUnit.MILLISECONDS)
     public void detectLocalChanges() {
-        if (entries.isEmpty()) {
-            return;
+        List<CollabShapeEntry> deleted = new ArrayList<>();
+        List<CollabShapeEntry> changed = new ArrayList<>();
+
+        for (CollabShapeEntry entry : store.snapshot()) {
+            if (canvas.isVisible(entry.shape())) {
+                entry.markPresent();
+                if (entry.refreshHash() && isLocal(entry)) {
+                    changed.add(entry);
+                }
+            } else if (entry.markMissing() >= DELETE_AFTER_MISSING) {
+                store.remove(entry.id());
+                deleted.add(entry);
+            }
         }
-        beginReceive();
-        try {
-            List<Entry> toDelete = new ArrayList<>();
-            List<Entry> toUpdate = new ArrayList<>();
 
-            synchronized (canvas.getVisible()) {
-                for (Entry e : entries.values()) {
-                    if (canvas.getVisible().contains(e.shape)) {
-                        if (e.missingCycles > 0) {
-                            e.missingCycles = 0;
-                        }
-                        String hash = CollabWire.contentHash(e.shape);
-                        if (!hash.equals(e.lastHash)) {
-                            e.lastHash = hash;
-                            toUpdate.add(e);
-                        }
-                    } else {
-                        e.missingCycles++;
-                        if (e.missingCycles >= DELETE_AFTER_MISSING) {
-                            toDelete.add(e);
-                        }
-                    }
-                }
-            }
+        deleted.forEach(entry -> {
+            broadcastDelete(entry.id());
+            log.info("Broadcast delete for shape {}", entry.id());
+        });
 
-            for (Entry e : toDelete) {
-                entries.remove(e.id);
-                if (!peers.isEmpty()) {
-                    String body = "{\"id\":" + e.id + "}";
-                    for (String peer : peers) {
-                        post(peer, "/collab/shape/delete", body);
-                    }
-                }
-                log.info("Broadcast delete for shape {}", e.id);
-            }
-
-            for (Entry e : toUpdate) {
-                if (!peers.isEmpty()) {
-                    String json = CollabWire.toJson(e.id, e.origin, e.shape);
-                    for (String peer : peers) {
-                        post(peer, "/collab/shape", json);
-                    }
-                }
-                log.debug("Broadcast update for shape {}", e.id);
-            }
-        } finally {
-            endReceive();
-        }
+        changed.forEach(entry -> {
+            broadcastShape(entry);
+            log.debug("Broadcast update for shape {}", entry.id());
+        });
     }
 
     @Scheduled(fixedDelay = 3, timeUnit = TimeUnit.SECONDS)
     public void syncWithPeers() {
-        if (peers.isEmpty()) {
-            return;
-        }
-        beginReceive();
-        try {
-            for (String peer : peers) {
-                syncWithPeer(peer);
-            }
-        } finally {
-            endReceive();
+        for (String peer : peers) {
+            syncWithPeer(peer);
         }
     }
 
     void receiveShape(String json) {
-        beginReceive();
-        try {
-            CollabWire.CollabShape cs = CollabWire.fromJson(json);
-            Entry existing = entries.get(cs.id());
-
-            if (existing != null) {
-                synchronized (canvas.getVisible()) {
-                    canvas.getVisible().remove(existing.shape);
-                    canvas.getVisible().add(cs.shape());
-                }
-                existing.shape = cs.shape();
-                existing.lastHash = CollabWire.contentHash(cs.shape());
-                existing.missingCycles = 0;
-                canvas.repaint();
-                log.debug("Updated shape {} from remote", cs.id());
-            } else {
-                entries.put(cs.id(), new Entry(cs.id(), cs.origin(), cs.shape(),
-                        CollabWire.contentHash(cs.shape())));
-                synchronized (canvas.getVisible()) {
-                    canvas.getVisible().add(cs.shape());
-                }
-                canvas.repaint();
-                log.info("Added remote shape {} (origin={})", cs.id(), cs.origin());
-            }
-        } finally {
-            endReceive();
+        CollabWire.CollabShape remote = CollabWire.fromJson(json);
+        if (store.origin().equals(remote.id().origin())) {
+            return;
         }
+
+        Shape previous = store.get(remote.id())
+                .map(CollabShapeEntry::shape)
+                .orElse(null);
+
+        store.upsert(remote).ifPresent(entry -> {
+            if (previous == null) {
+                canvas.add(entry.shape());
+                log.info("Added remote shape {}", entry.id());
+            } else {
+                canvas.replace(previous, entry.shape());
+                log.debug("Updated remote shape {}", entry.id());
+            }
+        });
     }
 
     void receiveDelete(String json) {
-        int id = JsonParser.parseString(json).getAsJsonObject().get("id").getAsInt();
-        Entry entry = entries.remove(id);
-        if (entry != null) {
-            synchronized (canvas.getVisible()) {
-                canvas.getVisible().remove(entry.shape);
-                canvas.getInvisible().add(entry.shape);
-            }
-            canvas.repaint();
+        CollabShapeId id = CollabWire.deleteId(json);
+        boolean knownDelete = store.isDeleted(id);
+        store.remove(id).ifPresent(entry -> {
+            canvas.remove(entry);
             log.info("Received delete for shape {}", id);
+        });
+        if (!knownDelete) {
+            broadcastDelete(id);
         }
     }
 
     String getSerializedShapes() {
-        synchronized (canvas.getVisible()) {
-            return entries.values().stream()
-                    .filter(e -> canvas.getVisible().contains(e.shape))
-                    .map(e -> CollabWire.toJson(e.id, e.origin, e.shape))
-                    .collect(Collectors.joining(",", "[", "]"));
-        }
+        List<CollabShapeEntry> visible = store.snapshot().stream()
+                .filter(entry -> canvas.isVisible(entry.shape()))
+                .toList();
+        return CollabWire.toJsonArray(visible);
+    }
+
+    String origin() {
+        return store.origin();
     }
 
     public void addPeer(String url) {
-        if (url == null || url.isEmpty() || peers.contains(url)) {
+        String peer = normalizePeer(url);
+        if (peer.isEmpty() || peers.contains(peer)) {
             return;
         }
-        peers.add(url);
-        log.info("Added peer: {}", url);
+        peers.add(peer);
+        log.info("Added peer: {}", peer);
     }
 
     public void removePeer(String url) {
-        peers.remove(url.trim());
-        log.info("Removed peer: {}", url.trim());
+        String peer = normalizePeer(url);
+        peers.remove(peer);
+        log.info("Removed peer: {}", peer);
     }
 
     public List<String> getPeers() {
@@ -245,73 +162,69 @@ public class CollabBridge {
     }
 
     private void syncWithPeer(String peer) {
-        JsonArray peerShapes = fetchPeerShapes(peer);
-        if (peerShapes == null) {
-            return;
-        }
+        peersClient.fetchShapes(peer).ifPresent(peerShapes -> {
+            Set<CollabShapeId> seen = new HashSet<>();
+            for (JsonElement element : peerShapes) {
+                CollabWire.CollabShape remote = CollabWire.fromJson(element.toString());
+                if (store.origin().equals(remote.id().origin())) {
+                    continue;
+                }
+                seen.add(remote.id());
+                receiveShape(element.toString());
+            }
 
-        Set<Integer> peerIds = new HashSet<>();
-        for (JsonElement el : peerShapes) {
-            peerIds.add(el.getAsJsonObject().get("id").getAsInt());
-        }
+            peersClient.fetchOrigin(peer).ifPresent(peerOrigin -> removeMissingPeerOwnedShapes(peerOrigin, seen));
+        });
+    }
 
-        for (JsonElement el : peerShapes) {
-            JsonObject obj = el.getAsJsonObject();
-            int id = obj.get("id").getAsInt();
-            if (!entries.containsKey(id)) {
-                receiveShape(obj.toString());
+    private void removeMissingPeerOwnedShapes(String peerOrigin, Set<CollabShapeId> seen) {
+        for (CollabShapeEntry entry : store.snapshot()) {
+            if (peerOrigin.equals(entry.id().origin()) && !seen.contains(entry.id())) {
+                store.remove(entry.id()).ifPresent(canvas::remove);
+                broadcastDelete(entry.id());
+                log.info("Removed stale peer shape {}", entry.id());
             }
         }
+    }
 
-        List<Entry> toRemove = new ArrayList<>();
-        for (Entry e : entries.values()) {
-            if (e.origin.equals(peer) && !peerIds.contains(e.id)) {
-                toRemove.add(e);
-            }
-        }
-        for (Entry e : toRemove) {
-            entries.remove(e.id);
-            synchronized (canvas.getVisible()) {
-                canvas.getVisible().remove(e.shape);
-                canvas.getInvisible().add(e.shape);
-            }
-            canvas.repaint();
-            log.info("Origin {} no longer has shape {}, removed locally", peer, e.id);
+    private void broadcastShape(CollabShapeEntry entry) {
+        for (String peer : peers) {
+            peersClient.postShape(peer, entry);
         }
     }
 
-    private JsonArray fetchPeerShapes(String peer) {
-        try {
-            String resp = rest.getForObject(peer + "/collab/shapes", String.class);
-            if (resp == null) {
-                return null;
-            }
-            return JsonParser.parseString(resp).getAsJsonArray();
-        } catch (Exception e) {
-            log.warn("Failed to fetch shapes from {}: {}", peer, e.getMessage());
-            return null;
+    private void broadcastDelete(CollabShapeId id) {
+        for (String peer : peers) {
+            peersClient.postDelete(peer, id);
         }
     }
 
-    private void post(String peer, String path, String body) {
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            rest.postForObject(peer + path, new HttpEntity<>(body, headers), Void.class);
-        } catch (Exception ex) {
-            log.warn("POST {} failed: {}", peer + path, ex.getMessage());
+    private boolean isLocal(CollabShapeEntry entry) {
+        return store.origin().equals(entry.id().origin());
+    }
+
+    private static String resolveOrigin(String configuredOrigin, int port) {
+        String configured = CollabWire.stringBody(configuredOrigin);
+        return configured.isEmpty() ? "localhost:" + port : configured;
+    }
+
+    private static List<String> parsePeers(String peersConfig) {
+        if (peersConfig == null || peersConfig.isBlank()) {
+            return List.of();
         }
+
+        return Arrays.stream(peersConfig.split(","))
+                .map(CollabBridge::normalizePeer)
+                .filter(peer -> !peer.isEmpty())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
-    private void beginReceive() {
-        receiving.incrementAndGet();
-    }
-
-    private void endReceive() {
-        receiving.decrementAndGet();
-    }
-
-    private boolean isReceiving() {
-        return receiving.get() > 0;
+    private static String normalizePeer(String url) {
+        String peer = CollabWire.stringBody(url);
+        while (peer.endsWith("/")) {
+            peer = peer.substring(0, peer.length() - 1);
+        }
+        return peer;
     }
 }

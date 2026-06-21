@@ -2,43 +2,135 @@ package me.micartey.viro.collab;
 
 import com.google.gson.*;
 import javafx.scene.paint.Color;
-import me.micartey.viro.shapes.*;
+import me.micartey.viro.shapes.Path;
+import me.micartey.viro.shapes.Polygon;
+import me.micartey.viro.shapes.Rectangle;
+import me.micartey.viro.shapes.Shape;
 import me.micartey.viro.shapes.utilities.Position;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class CollabWire {
+
+    private CollabWire() {
+    }
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(Color.class, new ColorAdapter())
             .registerTypeAdapter(Shape.class, new ShapeAdapter())
-            .registerTypeAdapter(Position.class, (InstanceCreator<Position>) type -> new Position(0, 0))
+            .registerTypeAdapter(Position.class, new PositionAdapter())
             .create();
 
-    public record CollabShape(int id, String origin, Shape shape) {}
+    public record CollabShape(CollabShapeId id, Shape shape) {}
 
-    public static String toJson(int id, String origin, Shape shape) {
+    public record CollabCursor(String origin, Position position, long updatedAt) {}
+
+    public static String toJson(CollabShapeEntry entry) {
+        return toJson(entry.id(), entry.shape());
+    }
+
+    public static String toJson(CollabShapeId id, Shape shape) {
         JsonObject obj = GSON.toJsonTree(shape, Shape.class).getAsJsonObject();
-        obj.addProperty("id", id);
-        obj.addProperty("origin", origin);
-        return obj.toString();
+        obj.addProperty("id", id.sequence());
+        obj.addProperty("origin", id.origin());
+        return GSON.toJson(obj);
+    }
+
+    public static String toJsonArray(Collection<CollabShapeEntry> entries) {
+        JsonArray array = new JsonArray();
+        for (CollabShapeEntry entry : entries) {
+            array.add(JsonParser.parseString(toJson(entry)));
+        }
+        return GSON.toJson(array);
     }
 
     public static CollabShape fromJson(String json) {
         JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
-        int id = obj.get("id").getAsInt();
-        String origin = obj.has("origin") ? obj.get("origin").getAsString() : "unknown";
+        CollabShapeId id = readShapeId(obj);
         Shape shape = GSON.fromJson(obj, Shape.class);
-        return new CollabShape(id, origin, shape);
+        return new CollabShape(id, shape);
+    }
+
+    public static String cursorJson(CollabCursor cursor) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("origin", cursor.origin());
+        obj.add("position", GSON.toJsonTree(cursor.position(), Position.class));
+        obj.addProperty("updatedAt", cursor.updatedAt());
+        return GSON.toJson(obj);
+    }
+
+    public static CollabCursor cursorFromJson(String json) {
+        JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+        String origin = obj.get("origin").getAsString();
+        Position position = GSON.fromJson(obj.get("position"), Position.class);
+        long updatedAt = obj.has("updatedAt") ? obj.get("updatedAt").getAsLong() : System.currentTimeMillis();
+        return new CollabCursor(origin, position, updatedAt);
+    }
+
+    public static String deleteJson(CollabShapeId id) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", id.sequence());
+        obj.addProperty("origin", id.origin());
+        return GSON.toJson(obj);
+    }
+
+    public static CollabShapeId deleteId(String json) {
+        return readShapeId(JsonParser.parseString(json).getAsJsonObject());
     }
 
     public static String contentHash(Shape shape) {
         JsonObject obj = GSON.toJsonTree(shape, Shape.class).getAsJsonObject();
-        // Remove unstable fields to compute a stable content fingerprint
-        obj.remove("id");
-        obj.remove("origin");
         return String.valueOf(obj.toString().hashCode());
+    }
+
+    public static String stringBody(String body) {
+        if (body == null) {
+            return "";
+        }
+
+        String trimmed = body.trim();
+        if (trimmed.isEmpty()) {
+            return "";
+        }
+
+        try {
+            JsonElement element = JsonParser.parseString(trimmed);
+            if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+                return element.getAsString().trim();
+            }
+        } catch (JsonParseException ignored) {
+            // Plain text request bodies are valid for the simple peer endpoint.
+        }
+
+        return trimmed;
+    }
+
+    private static CollabShapeId readShapeId(JsonObject obj) {
+        int sequence = obj.get("id").getAsInt();
+        String origin = obj.has("origin") ? obj.get("origin").getAsString() : "unknown";
+        return new CollabShapeId(origin, sequence);
+    }
+
+    private static class PositionAdapter implements JsonSerializer<Position>, JsonDeserializer<Position> {
+        @Override
+        public JsonElement serialize(Position src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("x", src.getX());
+            obj.addProperty("y", src.getY());
+            return obj;
+        }
+
+        @Override
+        public Position deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+            JsonObject obj = json.getAsJsonObject();
+            return new Position(obj.get("x").getAsDouble(), obj.get("y").getAsDouble());
+        }
     }
 
     private static class ColorAdapter implements JsonSerializer<Color>, JsonDeserializer<Color> {
@@ -89,10 +181,13 @@ public final class CollabWire {
             } else if (src instanceof Polygon poly) {
                 obj.addProperty("type", "Polygon");
                 JsonArray pts = new JsonArray();
-                for (Position p : poly.getPoints()) {
-                    pts.add(context.serialize(p));
-                }
+                poly.getPoints().stream()
+                        .sorted(Comparator.comparingDouble(Position::getX).thenComparingDouble(Position::getY))
+                        .map(context::serialize)
+                        .forEach(pts::add);
                 obj.add("points", pts);
+            } else {
+                throw new JsonParseException("Unsupported shape type: " + src.getClass().getName());
             }
 
             return obj;

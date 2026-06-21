@@ -11,6 +11,7 @@ import java.util.List;
 public class CollabController {
 
     private final CollabBridge bridge;
+    private final CollabCursorBridge cursors;
 
     @PostMapping("/shape")
     public void receiveShape(@RequestBody String json) {
@@ -22,19 +23,29 @@ public class CollabController {
         bridge.receiveDelete(json);
     }
 
+    @PostMapping("/cursor")
+    public void receiveCursor(@RequestBody String json) {
+        cursors.receiveCursor(json);
+    }
+
     @GetMapping(value = "/shapes", produces = "application/json")
     public String getShapes() {
         return bridge.getSerializedShapes();
     }
 
+    @GetMapping("/origin")
+    public String origin() {
+        return bridge.origin();
+    }
+
     @PostMapping("/peers")
     public void addPeer(@RequestBody String url) {
-        bridge.addPeer(url.trim());
+        bridge.addPeer(url);
     }
 
     @DeleteMapping("/peers")
     public void removePeer(@RequestBody String url) {
-        bridge.removePeer(url.trim());
+        bridge.removePeer(url);
     }
 
     @GetMapping("/peers")
